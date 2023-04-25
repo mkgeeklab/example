@@ -1,0 +1,11 @@
+{
+  "appId": "mkgeeklab.example.capacitor.purejs",
+  "appName": "capacitor+purejs",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
