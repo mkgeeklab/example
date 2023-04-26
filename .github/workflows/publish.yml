@@ -27,8 +27,8 @@ jobs:
       - name: install & build
         run: |
           cd capacitor/purejs
-          cat package.json
-          npm ci
+          rm package-lock.json
+          npm i
           npm run build
       
       - name: Deploy 🚀
