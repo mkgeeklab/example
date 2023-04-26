@@ -29,7 +29,7 @@ jobs:
           npm i -g npm-check-updates
           cd capacitor/purejs
           rm package-lock.json
-          ncu
+          ncu -u
           npm i
           npm run build
       
