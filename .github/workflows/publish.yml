@@ -1,0 +1,36 @@
+name: page publish
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Modify package.json
+        run: |
+          find . -name "package.json" -exec sed -i 's/"file:.*"/"*"/g' {}
+
+      - name: Setup npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > .npmrc
+        
+      - name: install & build
+        run: |
+          cd capacitor/purejs
+          npm ci
+          npm run build
+      
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: capacitor/purejs/dist
