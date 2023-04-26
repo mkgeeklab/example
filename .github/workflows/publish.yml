@@ -19,7 +19,7 @@ jobs:
 
       - name: Modify package.json
         run: |
-          find . -name "package.json" -exec sed -i 's/"file:.*"/"*"/g' {}
+          find . -name "package.json" -exec sed -i 's/"file:.*"/"latest"/g' {} \;
 
       - name: Setup npmrc
         run: echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > .npmrc
@@ -27,6 +27,7 @@ jobs:
       - name: install & build
         run: |
           cd capacitor/purejs
+          cat package.json
           npm ci
           npm run build
       
