@@ -21,8 +21,8 @@ jobs:
           ls -l
           find . -name "package.json" -exec sed -i 's/"file:.*"/"latest"/g' {} \;
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > .npmrc
-          cat package.json
-          npm ci
+          rm package-lock.json
+          npm i
           npm run build
       
       # - name: Deploy 🚀
