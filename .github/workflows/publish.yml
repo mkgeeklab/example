@@ -17,19 +17,15 @@ jobs:
 
       - name: Modify package.json
         run: |
-          find . -name "package.json" -exec sed -i 's/"file:.*"/"latest"/g' {} \;
-
-      - name: Setup npmrc
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > capacitor/purejs/.npmrc
-        
-      - name: install & build
-        run: |
           cd capacitor/purejs
+          ls -l
+          find . -name "package.json" -exec sed -i 's/"file:.*"/"latest"/g' {} \;
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > .npmrc
+          cat package.json
           npm ci
           npm run build
       
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: capacitor/purejs/dist
+      # - name: Deploy 🚀
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     folder: capacitor/purejs/dist
