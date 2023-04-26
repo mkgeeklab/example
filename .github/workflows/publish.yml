@@ -21,16 +21,12 @@ jobs:
 
       - name: Setup npmrc
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > ~/.npmrc
-          cat ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > capacitor/purejs/.npmrc
         
       - name: install & build
         run: |
-          npm i -g npm-check-updates
           cd capacitor/purejs
-          rm package-lock.json
-          ncu -u
-          npm i
+          npm ci
           npm run build
       
       - name: Deploy 🚀
