@@ -14,15 +14,15 @@ jobs:
       
       - name: Setup Node
         uses: actions/setup-node@v3
-        with:
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Modify package.json
         run: |
           find . -name "package.json" -exec sed -i 's/"file:.*"/"latest"/g' {} \;
 
       - name: Setup npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > .npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > ~/.npmrc
+          cat ~/.npmrc
         
       - name: install & build
         run: |
