@@ -17,3 +17,9 @@ mkg-mapview {
   --mkg-stroke-color: yellow;
   --mkg-stroke-width: 3;
 }
+.startMarker {
+  --mkg-icon: lightgreen;
+}
+.endMarker {
+  --mkg-icon: url('./flags-icon-png-10272.png');
+}
