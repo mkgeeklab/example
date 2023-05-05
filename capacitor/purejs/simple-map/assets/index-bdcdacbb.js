@@ -384,6 +384,15 @@ class HTMLElementBase extends HTMLElement {
   get isRemoved() {
     return this._isRemoved;
   }
+  /*****************************
+   * extra property
+   ******************************/
+  get extra() {
+    return this.state.get("extra");
+  }
+  set extra(value) {
+    this.state.set("extra", value);
+  }
   onCommandFromChildren(event) {
   }
   onChildrenAdded(children) {
@@ -429,9 +438,6 @@ class HTMLElementBase extends HTMLElement {
     this.onConnected();
   }
   async onConnected() {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500);
-    });
     const children = Array.from(this.children);
     children.forEach((element) => {
       if (element instanceof HTMLElementBase) {
@@ -3062,7 +3068,8 @@ class Marker extends Overlay {
       dragable: this.state.get("dragable"),
       icon: this.state.get("icon"),
       position: this.state.get("position"),
-      zIndex: this.state.get("zIndex")
+      zIndex: this.state.get("zIndex"),
+      extra: this.state.get("extra")
     };
     ["visible", "clickable", "draggable"].forEach((key) => {
       const propValue = getComputedCSS(this, `mkg-${key}`);
@@ -3083,6 +3090,9 @@ class Marker extends Overlay {
       currValues.position = parseILatLng(positionStr);
     }
     if (options) {
+      if ("extra" in options) {
+        currValues.extra = options.extra;
+      }
       if (typeof options.visible === "boolean") {
         currValues.visible = options.visible === true;
       }
@@ -3234,26 +3244,20 @@ class Marker extends Overlay {
     }
     new Promise((resolve) => {
       let position = this.state.get("position");
-      let positionChanged = false;
       if (positions.length === 1) {
         this._childLatLng = positions[0];
         position = this._childLatLng.toJSON();
-        positionChanged = true;
+        this.state.set("position", position);
       }
       const options = this.state.get("initOptions");
       if (options && options.position) {
         if ("position" in options && options.position) {
           if (isILatLng(options.position)) {
             this.state.set("position", options.position);
-            positionChanged = true;
           } else if (options.position instanceof LatLng) {
             this.state.set("position", options.position.toJSON());
-            positionChanged = true;
           }
         }
-      }
-      if (positionChanged) {
-        this.state.set("position", position);
       }
       if (this.initStatus === HTMLElementBaseStatus.NOT_READY) {
         this.initStatus = HTMLElementBaseStatus.VIEW_CREATING;
@@ -5112,7 +5116,8 @@ class Polyline extends Overlay {
       strokeColor: this.state.get("strokeColor"),
       strokeWidth: this.state.get("strokeWidth"),
       // strokeStyle: this.state.get('strokeStyle'),
-      zIndex: this.state.get("zIndex")
+      zIndex: this.state.get("zIndex"),
+      extra: this.state.get("extra")
     };
     ["visible", "clickable", "geodesic"].forEach((key) => {
       const propValue = getComputedCSS(this, `mkg-${key}`);
@@ -5133,6 +5138,9 @@ class Polyline extends Overlay {
       currValues.zIndex = parseInt(zIndex.replace(/[^\d].*$/g, ""), 10);
     }
     if (options) {
+      if ("extra" in options) {
+        currValues.extra = options.extra;
+      }
       if (typeof options.visible === "boolean") {
         currValues.visible = options.visible === true;
       }
@@ -5923,7 +5931,6 @@ class PluginMarker extends MVCBaseObject {
     const options = args[1];
     return this._gsMarkerOptions(options).then((opts) => {
       if (this.marker) {
-        console.log("setOptions", opts);
         this.marker.setOptions(opts);
       }
     });
@@ -6717,8 +6724,15 @@ const GoogleMapsWeb = new class {
     this.viewInstances = {};
     this.initOptions = {};
   }
+  forRoot(options = {}) {
+    if (!options) {
+      return this;
+    }
+    const apiKey = "jsApiKey" in options ? options.jsApiKey : void 0;
+    this.loadGoogleMapsJS(apiKey);
+    return this;
+  }
   async onInit(platformId, options) {
-    this.loadGoogleMapsJS(options.jsApiKey);
   }
   onWindowReady() {
     console.log("window.ready");
@@ -6837,7 +6851,9 @@ const GoogleMapsWeb = new class {
 const init = async () => {
   window.mkgeeklab.googlemaps.setUp({
     bridge: {
-      browser: GoogleMapsWeb
+      browser: GoogleMapsWeb.forRoot({
+        jsApiKey: `AIzaSyBpNKkll5yJ2YbS-i0dE5yIdEk8sef-S6g`
+      })
     }
   });
   const markers = Array.from(document.getElementsByTagName("mkg-marker"));

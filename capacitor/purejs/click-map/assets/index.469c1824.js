@@ -1,4 +1,37 @@
-(function polyfill() {
+var __accessCheck = (obj, member, msg2) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg2);
+};
+var __privateGet = (obj, member, getter) => {
+  __accessCheck(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateSet = (obj, member, value, setter) => {
+  __accessCheck(obj, member, "write to private field");
+  setter ? setter.call(obj, value) : member.set(obj, value);
+  return value;
+};
+var __privateWrapper = (obj, member, setter, getter) => {
+  return {
+    set _(value) {
+      __privateSet(obj, member, value, setter);
+    },
+    get _() {
+      return __privateGet(obj, member, getter);
+    }
+  };
+};
+var __privateMethod = (obj, member, method) => {
+  __accessCheck(obj, member, "access private method");
+  return method;
+};
+var _info, _map, _counter, _getRandomColor, getRandomColor_fn, _onMapClick, onMapClick_fn, _onMarkerClick, onMarkerClick_fn;
+const p = function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
     return;
@@ -17,15 +50,15 @@
       }
     }
   }).observe(document, { childList: true, subtree: true });
-  function getFetchOpts(link) {
+  function getFetchOpts(script) {
     const fetchOpts = {};
-    if (link.integrity)
-      fetchOpts.integrity = link.integrity;
-    if (link.referrerPolicy)
-      fetchOpts.referrerPolicy = link.referrerPolicy;
-    if (link.crossOrigin === "use-credentials")
+    if (script.integrity)
+      fetchOpts.integrity = script.integrity;
+    if (script.referrerpolicy)
+      fetchOpts.referrerPolicy = script.referrerpolicy;
+    if (script.crossorigin === "use-credentials")
       fetchOpts.credentials = "include";
-    else if (link.crossOrigin === "anonymous")
+    else if (script.crossorigin === "anonymous")
       fetchOpts.credentials = "omit";
     else
       fetchOpts.credentials = "same-origin";
@@ -38,8 +71,9 @@
     const fetchOpts = getFetchOpts(link);
     fetch(link.href, fetchOpts);
   }
-})();
-const style = "";
+};
+p();
+var style = "";
 var FrameworkId;
 (function(FrameworkId2) {
   FrameworkId2["NO_FRAMEWORK"] = "no_framework";
@@ -333,29 +367,17 @@ class HTMLElementBase extends HTMLElement {
       this.changeFunctions[propertyName] = listener;
     }
   }
-  /**
-   * Returns the id of this instance
-   */
   getId() {
     return `${this.viewId}`;
   }
-  /**
-   * Invoked each time one of the custom element's attributes is added, removed, or changed.
-   */
   attributeChangedCallback(name, oldValue, newValue) {
     if (name in this.changeFunctions) {
       this.changeFunctions[name].call(this, name, oldValue, newValue);
     }
   }
-  /*****************************
-   * hasParent property
-   ******************************/
   get hasParent() {
     return this._isConnected;
   }
-  /*****************************
-   * initStatus property
-   ******************************/
   get initStatus() {
     return this._initStatus;
   }
@@ -372,17 +394,17 @@ class HTMLElementBase extends HTMLElement {
       }
     }
   }
-  /*****************************
-   * ready property
-   ******************************/
   get ready() {
     return this._initStatus === HTMLElementBaseStatus.VIEW_CREATED;
   }
-  /*****************************
-   * isRemoved property
-   ******************************/
   get isRemoved() {
     return this._isRemoved;
+  }
+  get extra() {
+    return this.state.get("extra");
+  }
+  set extra(value) {
+    this.state.set("extra", value);
   }
   onCommandFromChildren(event) {
   }
@@ -390,9 +412,6 @@ class HTMLElementBase extends HTMLElement {
   }
   onChildrenRemoved(children) {
   }
-  /**
-   * Invoked when new elements are added or removed
-   */
   _onMutations(mutations, caller) {
     const addedChildren = [];
     const removedChildren = [];
@@ -423,15 +442,11 @@ class HTMLElementBase extends HTMLElement {
       this.onChildrenRemoved(removedChildren);
     }
   }
-  // tslint:disable-next-line
   connectedCallback() {
     this._isConnected = true;
     this.onConnected();
   }
   async onConnected() {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500);
-    });
     const children = Array.from(this.children);
     children.forEach((element) => {
       if (element instanceof HTMLElementBase) {
@@ -445,7 +460,6 @@ class HTMLElementBase extends HTMLElement {
       detail: true
     }));
   }
-  // tslint:disable-next-line
   disconnectedCallback() {
     this._isConnected = false;
     this.onDisconnected();
@@ -475,11 +489,6 @@ class HTMLElementBase extends HTMLElement {
   hasEventListener(eventName) {
     return eventName in this.SUBSCRIPTIONS_FIELD && Object.keys(this.SUBSCRIPTIONS_FIELD[eventName]).length > 0;
   }
-  /**
-   * Adds an event listener for specified event.
-   * @params {eventName} eventName
-   * @params {listener}
-   */
   addEventListener(eventName, listener, options) {
     if (!listener || typeof listener !== "function") {
       throw Error("Listener for addEventListener() method is not a function");
@@ -500,11 +509,6 @@ class HTMLElementBase extends HTMLElement {
       "listener": listener
     };
   }
-  /**
-   * Removes an event listener
-   * @params {eventName} eventName
-   * @params {listener}
-   */
   removeEventListener(eventName, listener) {
     if (!eventName) {
       const eventNames = Object.keys(this.SUBSCRIPTIONS_FIELD);
@@ -639,11 +643,6 @@ class LatLng extends HTMLElementBase {
       }
     }));
   }
-  /**
-   * Comparison function.
-   * @method
-   * @return {Boolean}
-   */
   equals(other) {
     if (!other)
       return false;
@@ -662,10 +661,6 @@ class LatLng extends HTMLElementBase {
     this._changed = true;
     this._onPropertyChanged();
   }
-  /**
-   * Returns the latitude in degrees.
-   * @return {number}
-   */
   get lat() {
     return this._lat;
   }
@@ -678,10 +673,6 @@ class LatLng extends HTMLElementBase {
     this._changed = true;
     this._onPropertyChanged();
   }
-  /**
-   * Returns the longitude in degrees.
-   * @return {number}
-   */
   get lng() {
     return this._lng;
   }
@@ -697,31 +688,15 @@ class LatLng extends HTMLElementBase {
       lng: this._lng
     };
   }
-  /**
-   * @method
-   * @return {String} latitude,lontitude
-   */
   toString() {
     return "(" + this._lat + ", " + this._lng + ")";
   }
-  /**
-   * @method
-   * @param {Number}
-   * @return {String} latitude,lontitude
-   */
   toUrlValue(precision = 6) {
     return [
       toFixedForGoogleMaps(this._lat, precision),
       toFixedForGoogleMaps(this._lng, precision)
     ].join(",");
   }
-  /**
-   * Converts to JSON representation. This function is intended to be used via JSON.stringify.
-   *
-   * @method
-   * @param {Number}
-   * @return {ILatLng} latitude,lontitude
-   */
   toJSON() {
     return {
       lat: this._lat,
@@ -970,13 +945,6 @@ class MVCBaseArray extends MVCBaseObject {
       });
     }
   }
-  /**
-   * The same as `Array.map` but runs a single async operation at a time.
-   *
-   * @name mapSeries
-   * @param {(item: T, idx: number, next: () => void) => void} iteratee - An async function to apply to each item in array.
-   * @return {Promise<any[]>} a promise.
-   */
   mapSeries(iteratee) {
     if (typeof iteratee !== "function") {
       throw new Error("iteratee must be a function");
@@ -1010,22 +978,6 @@ class MVCBaseArray extends MVCBaseObject {
       }
     });
   }
-  /**
-   * The same as `Array.map` but runs async all `iteratee` function at the same time.
-   *
-   * ```
-   * MVCArray.mapAsync(function(item, idx, callback) {
-   *    ...
-   *    callback(value);
-   * }).then(function(values) {
-   *
-   * });
-   * ```
-   *
-   * @name mapAsync
-   * @param {(item: T, idx: number, next: () => void) => void} iteratee - An async function to apply to each item in array.
-   * @return {Promise} a promise
-   */
   mapAsync(iteratee) {
     if (typeof iteratee !== "function") {
       throw new Error("iteratee must be a function");
@@ -1052,25 +1004,12 @@ class MVCBaseArray extends MVCBaseObject {
       });
     });
   }
-  /**
-   * The same as `Array.forEach`
-   *
-   * @name forEach
-   * @param {(item: T, idx: number) => void} iteratee - An sync function to apply to each item in array.
-   */
   forEach(iteratee) {
     if (typeof iteratee !== "function") {
       throw new Error("iteratee must be a function");
     }
     this.ARRAY_FIELD.forEach(iteratee);
   }
-  /**
-   * The same as `Array.forEach` but runs async all `iteratee` function at the same time.
-   *
-   * @name forEachAsync
-   * @param {(item: T, idx: number, next: () => void) => void} iteratee - An async function to apply to each item in array.
-   * @return {Promise<void>} a promise, if no calback if passed.
-   */
   forEachAsync(iteratee) {
     if (typeof iteratee !== "function") {
       throw new Error("iteratee must be a function");
@@ -1095,13 +1034,6 @@ class MVCBaseArray extends MVCBaseObject {
       });
     });
   }
-  /**
-   * The same as `Array.filter` but runs async all `iteratee` function at the same time.
-   *
-   * @name filterAsync
-   * @param {Function} iteratee - An async function to apply to each item in array.
-   * @return {Promise} a promise
-   */
   filterAsync(iteratee) {
     if (typeof iteratee !== "function") {
       throw new Error("iteratee must be a function");
@@ -1130,20 +1062,6 @@ class MVCBaseArray extends MVCBaseObject {
       }
     });
   }
-  /**
-   * Returns the first index at which a given element can be found in the array, or -1 if it is not present.
-   *
-   * @name indexOf
-   * @param {T} searchElement - Element to locate in the array.
-   * @param {number} [searchElement] - The index to start the search at.
-   * If the index is greater than or equal to the array's length, -1 is returned,
-   * which means the array will not be searched.
-   * If the provided index value is a negative number,
-   * it is taken as the offset from the end of the array.
-   * Note: if the provided index is negative, the array is still searched from front to back.
-   * If the provided index is 0, then the whole array will be searched. Default: 0 (entire array is searched).
-   * @return The first index of the element in the array; -1 if not found.
-   */
   indexOf(item, searchElement) {
     searchElement = searchElement === void 0 || searchElement === null ? 0 : searchElement;
     if (typeof searchElement !== "number") {
@@ -1154,27 +1072,12 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return this.ARRAY_FIELD.indexOf(item, searchElement);
   }
-  /**
-   * Removes all elements. Fire `remove_at` event for each element.
-   *
-   * @name clear
-   * @param {boolean} [noNotify] - Sets `true` if you don't want to fire `remove_at` event.
-   */
   clear(noNotify) {
     this.ARRAY_FIELD.length = 0;
     if (noNotify !== true) {
       this.dispatchEvent(new Event("remove_all"));
     }
   }
-  /**
-   * Adds one element to the end of an array and returns the new length of the array.
-   * Fire `insert_at` event if `noNotify` is `false`.
-   *
-   * @name push
-   * @param {T} value - The element to add to the end of the array.
-   * @param {boolean} [noNotify] - Sets `true` if you don't want to fire `insert_at` event.
-   * @return {number} The new length property of the object upon which the method was called.
-   */
   push(value, noNotify) {
     this.ARRAY_FIELD.push(value);
     if (noNotify !== true) {
@@ -1187,16 +1090,6 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return this.ARRAY_FIELD.length;
   }
-  /**
-   * Adds one element to the end of an array and returns the new length of the array.
-   * Fire `insert_at` event if `noNotify` is `false`.
-   *
-   * @name insertAt
-   * @param {number} index - The position of the array you want to insert new element.
-   * @param {any} value - The element to add to the end of the array.
-   * @param {boolean} [noNotify] - Sets `true` if you don't want to fire `insert_at` event.
-   * @return {number} The new length property of the object upon which the method was called.
-   */
   insertAt(index, value, noNotify) {
     if (typeof index !== "number") {
       throw new Error("index must be a number");
@@ -1215,12 +1108,6 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return this.ARRAY_FIELD.length;
   }
-  /**
-   * Returns a new array that is the clone of internal array.
-   *
-   * @name toArray
-   * @return {Array<T>} New array
-   */
   toArray() {
     const results = [];
     this.ARRAY_FIELD.forEach((item) => {
@@ -1228,13 +1115,6 @@ class MVCBaseArray extends MVCBaseObject {
     });
     return results;
   }
-  /**
-   * Returns item of specified position.
-   *
-   * @name getAt
-   * @param {number} index - The position of the array you want to get.
-   * @return {T} item
-   */
   getAt(index) {
     if (typeof index !== "number") {
       throw new Error("index must be a number");
@@ -1247,15 +1127,6 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return this.ARRAY_FIELD[index];
   }
-  /**
-   * Replaces item of specified position.
-   *
-   * @name setAt
-   * @param {number} index - The position of the array you want to get.
-   * @param {T} value - New element
-   * @param {boolean} [noNotify] - Sets `true` if you don't want to fire `set_at` event.
-   * @return {T} previous item
-   */
   setAt(index, value, noNotify) {
     if (typeof index !== "number") {
       throw new Error("index must be a number");
@@ -1279,14 +1150,6 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return prevValue;
   }
-  /**
-   * Removes item of specified position.
-   *
-   * @name removeAt
-   * @param {number} index - The position of the array you want to get.
-   * @param {boolean} [noNotify] - Sets `true` if you don't want to fire `remove_at` event.
-   * @return {Tany} removed item
-   */
   removeAt(index, noNotify) {
     if (typeof index !== "number") {
       throw new Error("index must be a number");
@@ -1309,13 +1172,6 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return prevValue;
   }
-  /**
-   * Removes item of the last array item.
-   *
-   * @name pop
-   * @param {boolean} [noNotify] - Sets `true` if you don't want to fire `remove_at` event.
-   * @return {T} removed item
-   */
   pop(noNotify) {
     const index = this.ARRAY_FIELD.length - 1;
     const value = this.ARRAY_FIELD.pop();
@@ -1329,32 +1185,12 @@ class MVCBaseArray extends MVCBaseObject {
     }
     return value;
   }
-  /**
-   * Returns the length of array.
-   *
-   * @name getLength
-   * @return {number} Number of items
-   */
   getLength() {
     return this.ARRAY_FIELD.length;
   }
-  /**
-   * Reverses an array in place. The first array element becomes the last, and the last array element becomes the first.
-   *
-   * @name reverse
-   */
   reverse() {
     this.ARRAY_FIELD.reverse();
   }
-  /**
-   * The `sort()` method sorts the elements of an array in place and returns the array.
-   * The same as `array.sort()`.
-   *
-   * @name sort
-   * @param {Function} [compareFunction] - Specifies a function that defines the sort order.
-   *  If omitted, the array is sorted according to each character's Unicode code point value,
-   *  according to the string conversion of each element.
-   */
   sort(compareFunction) {
     if (typeof compareFunction === "function") {
       this.ARRAY_FIELD.sort(compareFunction);
@@ -1425,9 +1261,6 @@ class CustomViewBase extends HTMLElementBase {
       }
     ]);
   }
-  /**
-   * Invokes a function in native side.
-   */
   execPromise(pluginName, methodName, args = [], execOptions = {}) {
     if (this.isRemoved) {
       return Promise.reject(`<${this.tagName} __pluginDomId="${this.viewId}"> has been already removed`);
@@ -1488,9 +1321,6 @@ class CustomViewBase extends HTMLElementBase {
       this._execQueue.removeEventListener("insert_at", this._bind_onExecute);
     }
   }
-  /**
-   * Invoked when insert a command
-   */
   onExecute() {
     if (!this.cmdQueue) {
       return;
@@ -1504,13 +1334,6 @@ class CustomViewBase extends HTMLElementBase {
       }
     }
   }
-  /**
-   * Statements from overlays.
-   *
-   * If this view is not ready (not VIEW_CREATED status),
-   * the statements are buffered once.
-   * Then those statements are processed at _onInitStatusChanged
-   */
   onCommandFromChildren(event) {
     this.getId();
     const customEvent = event;
@@ -2157,17 +1980,11 @@ class TreeElement {
     this.element = element;
     this.id = getPluginDomId(element);
   }
-  /**
-   * Returns true if givin TreeElement and this TreeElement are the same values.
-   */
   equals(other) {
     if (!other || !(other instanceof TreeElement))
       return false;
     return compareObjs(this.toJSON(), other.toJSON());
   }
-  /**
-   * Returns a JSON object which represents this TreeElement values.
-   */
   toJSON() {
     if (!this.element) {
       return {};
@@ -2182,24 +1999,17 @@ class TreeElement {
       zIndex.push(this.zIndex.z);
     }
     return {
-      // c: children
       c: children,
-      // t: touchable
       t: this.pointerEvents,
-      // o: overflow
       o: this.overflowX << 2 | this.overflowY,
-      // r: rectangle
       r: [
         Math.round(this.rect.left),
         Math.round(this.rect.top),
         Math.round(this.rect.width),
         Math.round(this.rect.height)
       ],
-      // i: id
       i: this.id,
-      // z: Z-index
       z: zIndex,
-      // n: tag name
       n: this.element.tagName
     };
   }
@@ -2208,26 +2018,12 @@ class ZIndexManager {
   constructor() {
     this.cache = {};
   }
-  /**
-   * @hidden
-   */
   _clearInternalCache() {
     this.cache = {};
   }
-  /**
-   * @hidden
-   */
   _removeCacheById(elemId) {
     delete this.cache[elemId];
   }
-  /**
-   * Returns the z-index of given element
-   * (http://stackoverflow.com/a/1388022)
-   *
-   * @params {HTMLElement} element
-   * @params {string} styleProperty
-   * @return {IzIndexInfo | null} Actual value
-   */
   getZIndex(element) {
     if (!element) {
       return null;
@@ -2821,9 +2617,6 @@ class Overlay extends HTMLElementBase {
   }
   onRedraw() {
   }
-  /*****************************
-   * visible property
-   ******************************/
   getVisible() {
     return this.state.get("visible");
   }
@@ -2854,9 +2647,6 @@ class Overlay extends HTMLElementBase {
   get parentView() {
     return this._parentView;
   }
-  /**
-   * Applies the changed property value to the native side overlay
-   */
   _onPropertyChanged(event) {
     const key = event.detail.key;
     const value = event.detail.value;
@@ -2888,9 +2678,6 @@ class Overlay extends HTMLElementBase {
       subMethodName: "setOptions"
     }, options]);
   }
-  /*****************************
-   * Invokes a function in native side.
-   ******************************/
   execPromise(pluginName, methodName, args = [], execOptions = {}) {
     if (this.isRemoved) {
       return Promise.reject(`<${this.tagName} __pluginDomId="${this.viewId}"> has been already removed`);
@@ -2918,9 +2705,6 @@ class Overlay extends HTMLElementBase {
       });
     });
   }
-  /**
-   * Don't invoke this method directly
-   */
   _onExecute() {
     if (!this.hasEventListener("command")) {
       return;
@@ -3005,7 +2789,7 @@ const parseILatLng = (latLngString) => {
     lng
   };
 };
-class Marker extends Overlay {
+class Marker$1 extends Overlay {
   static get observedAttributes() {
     return ["class", "id", "position"];
   }
@@ -3037,18 +2821,12 @@ class Marker extends Overlay {
     }
     this.applyOptionsToState();
   }
-  /*****************************
-   * clickable property
-   ******************************/
   getClickable() {
     return this.state.get("clickable");
   }
   setClickable(value) {
     this.state.set("clickable", value === true);
   }
-  /*****************************
-   * draggable property
-   ******************************/
   getDraggable() {
     return this.state.get("draggable");
   }
@@ -3062,7 +2840,8 @@ class Marker extends Overlay {
       dragable: this.state.get("dragable"),
       icon: this.state.get("icon"),
       position: this.state.get("position"),
-      zIndex: this.state.get("zIndex")
+      zIndex: this.state.get("zIndex"),
+      extra: this.state.get("extra")
     };
     ["visible", "clickable", "draggable"].forEach((key) => {
       const propValue = getComputedCSS(this, `mkg-${key}`);
@@ -3083,6 +2862,9 @@ class Marker extends Overlay {
       currValues.position = parseILatLng(positionStr);
     }
     if (options) {
+      if ("extra" in options) {
+        currValues.extra = options.extra;
+      }
       if (typeof options.visible === "boolean") {
         currValues.visible = options.visible === true;
       }
@@ -3112,9 +2894,6 @@ class Marker extends Overlay {
       this.state.set(key, currValues[key]);
     });
   }
-  /**
-   * Receive the dragstart, drag, and dragend events from native
-   */
   _onPositionChangedFromNative(event) {
     if (!isCustomEvent(event)) {
       return;
@@ -3123,9 +2902,6 @@ class Marker extends Overlay {
     const position = customEvent.detail.latLng;
     this.state.set("position", position);
   }
-  /**
-   * Receive the command event from <mkg-latlng>
-   */
   onCommandFromChildren(event) {
     const detail = event.detail;
     switch (detail.methodName) {
@@ -3134,9 +2910,6 @@ class Marker extends Overlay {
         break;
     }
   }
-  /*****************************
-   * position property
-   ******************************/
   getPosition() {
     const pos = this.state.get("position");
     return {
@@ -3154,24 +2927,6 @@ class Marker extends Overlay {
       throw new Error("setPosition() accepts only ILatLng value");
     }
   }
-  /*****************************
-   * TODO: icon property
-   ******************************/
-  // get icon(): string | null | undefined {
-  //   return this.state.get('icon');
-  // }
-  //
-  // set icon(value: string | null | undefined) {
-  //   if (typeof value === null || typeof value === undefined) {
-  //     this.removeAttribute('icon');
-  //     this.state.set('icon', undefined);
-  //     this.state.set('calculatedIcon', undefined);
-  //   } else {
-  //     this.state.set('icon', value);
-  //     this.state.set('calculatedIcon', this._normalizedIcon(value));
-  //     this._onPropertyChanged('icon', this.state.get('calculatedIcon'));
-  //   }
-  // }
   _normalizedIcon(icon) {
     if (icon) {
       if (isHTMLColorString(icon)) {
@@ -3234,26 +2989,20 @@ class Marker extends Overlay {
     }
     new Promise((resolve) => {
       let position = this.state.get("position");
-      let positionChanged = false;
       if (positions.length === 1) {
         this._childLatLng = positions[0];
         position = this._childLatLng.toJSON();
-        positionChanged = true;
+        this.state.set("position", position);
       }
       const options = this.state.get("initOptions");
       if (options && options.position) {
         if ("position" in options && options.position) {
           if (isILatLng(options.position)) {
             this.state.set("position", options.position);
-            positionChanged = true;
           } else if (options.position instanceof LatLng) {
             this.state.set("position", options.position.toJSON());
-            positionChanged = true;
           }
         }
-      }
-      if (positionChanged) {
-        this.state.set("position", position);
       }
       if (this.initStatus === HTMLElementBaseStatus.NOT_READY) {
         this.initStatus = HTMLElementBaseStatus.VIEW_CREATING;
@@ -3306,9 +3055,6 @@ class Marker extends Overlay {
       this.state.set("initOptions", void 0);
     });
   }
-  /**
-   * Invoked each time the custom element is disconnected from the document's DOM.
-   */
   async onDisconnected() {
     await super.onDisconnected();
     this.state.removeEventListener("visible_changed", this._bind_onPropertyChanged);
@@ -3425,9 +3171,6 @@ class InfoWindowBase extends Overlay {
   onCanvas(canvas) {
     throw new Error("Please override the onCanvas method");
   }
-  /**
-   * Invokes before oncanvas to change the contents size
-   */
   onContentMeasure(width, height) {
     return {
       width,
@@ -3440,9 +3183,6 @@ class InfoWindowBase extends Overlay {
       height: this._options.contentSize.height
     };
   }
-  /**
-   * Invokes before oncanvas to change the contents position
-   */
   onContentPosition(x, y) {
     return {
       x,
@@ -3455,9 +3195,6 @@ class InfoWindowBase extends Overlay {
       y: this._options.contentPosition.y
     };
   }
-  /**
-   * Invokes to set the anchor position of the info window
-   */
   onAnchorPosition(x, y) {
     return {
       x,
@@ -3470,9 +3207,6 @@ class InfoWindowBase extends Overlay {
       y: this._options.anchorPosition.y
     };
   }
-  /**
-   * Invokes before oncanvas to change the canvas size
-   */
   onCanvasMeasure(width, height) {
     return {
       width,
@@ -3485,9 +3219,6 @@ class InfoWindowBase extends Overlay {
       height: this._options.canvasSize.height
     };
   }
-  /**
-   * Invokes before oncanvas to change the tail size
-   */
   onTailSize(width, height) {
     return {
       width,
@@ -3517,8 +3248,6 @@ class InfoWindowBase extends Overlay {
         listener(new MouseEvent(event.type, {
           screenX: mouseEvent.screenX,
           screenY: mouseEvent.screenY,
-          // 'clientX': mouseEvent.clientX - dx,
-          // 'clientY': mouseEvent.clientY - dy,
           clientX: mouseEvent.clientX,
           clientY: mouseEvent.clientY,
           ctrlKey: mouseEvent.ctrlKey,
@@ -3648,7 +3377,7 @@ class InfoWindowBase extends Overlay {
     return this._options.content;
   }
   async open(target) {
-    if (!target || !(target instanceof Marker)) {
+    if (!target || !(target instanceof Marker$1)) {
       return;
     }
     this.isOpen = true;
@@ -3789,9 +3518,6 @@ class InfoWindowBase extends Overlay {
     this.initStatus = HTMLElementBaseStatus.VIEW_CREATED;
     this.setHasMap(true);
   }
-  /**
-   * Invoked each time the custom element is disconnected from the document's DOM.
-   */
   async onDisconnected() {
     await super.onDisconnected();
     this.setHasMap(false);
@@ -3965,10 +3691,6 @@ class LatLngBounds {
       this.beyond180 = this.southWest.lng > 0 && this.northEast.lng < 0 || this.southWest.lng > this.northEast.lng;
     }
   }
-  /**
-   * Converts to string
-   * @return {string}
-   */
   toString() {
     if (this.isEmpty()) {
       return "((1, 180), (-1, -180))";
@@ -3976,17 +3698,9 @@ class LatLngBounds {
     const bounds = this.toJSON();
     return `((${bounds.south}, ${bounds.west}), (${bounds.north}, ${bounds.east}))`;
   }
-  /**
-   * Returns if the bounds are empty.
-   * @return {boolean}
-   */
   isEmpty() {
     return !this.southWest && !this.northEast;
   }
-  /**
-   * Converts to ILatLngBoundsLiteral
-   * @return {ILatLngBoundsLiteral}
-   */
   toJSON() {
     if (this.isEmpty()) {
       return {
@@ -4003,11 +3717,6 @@ class LatLngBounds {
       west: this.southWest.lng
     };
   }
-  /**
-   * Returns a string of the form "lat_sw,lng_sw,lat_ne,lng_ne" for this bounds, where "sw" corresponds to the southWest corner of the bounding box, while "ne" corresponds to the northEast corner of that box.
-   * @param precision {number}
-   * @return {string}
-   */
   toUrlValue(precision = 6) {
     if (this.isEmpty()) {
       return [1, 180, -1, -180].join(",");
@@ -4019,10 +3728,6 @@ class LatLngBounds {
       toFixedForGoogleMaps(this.northEast.lng, precision)
     ].join(",");
   }
-  /**
-   * Extends this bounds to contain the given point.
-   * @param LatLng {LatLng | ILatLng}
-   */
   extend(latLng) {
     if (!latLng || !("lat" in latLng && "lng" in latLng))
       return;
@@ -4099,11 +3804,6 @@ class LatLngBounds {
       this.beyond180 = this.beyond180 || west > 0 && east < 0 || this.southWest.lng > this.northEast.lng;
     }
   }
-  /**
-   * Comparison function.
-   * @method
-   * @return {Boolean}
-   */
   equals(other) {
     if (!other)
       return false;
@@ -4138,10 +3838,6 @@ class LatLngBounds {
     }
     return this.southWest.lat === literal.south && this.southWest.lng === literal.west && this.northEast.lat === literal.north && this.northEast.lng === literal.east;
   }
-  /**
-   * Returns true if the given lat/lng is in this bounds.
-   * @param LatLng {LatLng | ILatLng}
-   */
   contains(latLng) {
     if (!latLng || !("lat" in latLng) || !("lng" in latLng)) {
       return false;
@@ -4158,10 +3854,6 @@ class LatLngBounds {
     }
     return containLat && containLng;
   }
-  /**
-   * Computes the center of this LatLngBounds
-   * @return {LatLng}
-   */
   getCenter() {
     if (this.isEmpty()) {
       return new LatLng(0, -180);
@@ -4179,10 +3871,6 @@ class LatLngBounds {
     const centerLat = (this.southWest.lat + this.northEast.lat) / 2;
     return new LatLng(centerLat, centerLng);
   }
-  /**
-   * Returns true if the given lat/lng is in this bounds.
-   * @param LatLng {LatLngBounds | ILatLngBounds | ILatLngBoundsLiteral}
-   */
   union(other) {
     if (!other) {
       if (this.isEmpty()) {
@@ -4202,26 +3890,12 @@ class LatLngBounds {
     this.extend(otherBounds.northEast);
     return this;
   }
-  /**
-   * Returns the south-west corner of this bounds
-   * @return {LatLng}
-   */
   getSouthWest() {
     return new LatLng(this.southWest.lat, this.southWest.lng);
   }
-  /**
-   * Returns the north-east corner of this bounds
-   * @return {LatLng}
-   */
   getNorthEast() {
     return new LatLng(this.northEast.lat, this.northEast.lng);
   }
-  /**
-   * Converts the given map bounds to a lat/lng span.
-   * @return {LatLng}
-   *
-   * https://stackoverflow.com/a/27348239/697856
-   */
   toSpan() {
     if (this.isEmpty()) {
       return new LatLng(0, 0);
@@ -4575,9 +4249,6 @@ class MapView extends CustomViewBase {
     }
     return cameraParams;
   }
-  /**
-   * Moves the camera to the specified camera position
-   */
   moveCamera(params) {
     if (!params) {
       return Promise.resolve();
@@ -4585,33 +4256,6 @@ class MapView extends CustomViewBase {
     const cameraParams = this.convertToCameraParams(params);
     return this.execPromise(this.viewId, "moveCamera", [cameraParams]);
   }
-  /**
-   * Fits the camera viewport to the speicified bounds
-   */
-  // public fitBounds(
-  //   cameraTarget: ILatLngBounds | ILatLngBoundsLiteral | LatLngBounds | MVCArray<ILatLng | LatLng> | LatLng[] | ILatLng[]
-  // ): Promise<void> {
-  //   const positionArray: ILatLng[] = toILatLngArray(cameraTarget);
-  //   const bounds: LatLngBounds = new LatLngBounds();
-  //   positionArray.forEach((position: ILatLng): void => {
-  //     bounds.extend(position);
-  //   });
-  //
-  //   const centerLatLng: LatLng = bounds.getCenter();
-  //   const centerPx: IPoint = this.getProjection().fromLatLngToPoint(centerLatLng);
-  //   const northEastLatLng: LatLng = bounds.getNorthEast();
-  //   const northEastPx: IPoint = this.getProjection().fromLatLngToPoint(northEastLatLng);
-  //   const r: number = Math.abs(centerPx.x - northEastPx.x);
-  //   const zoom: number = Math.log(256 / r) / Math.log(2);
-  //
-  //   return this.moveCamera({
-  //     center: centerLatLng.toJSON(),
-  //     zoom,
-  //   });
-  // }
-  /*****************************
-   * maptype property
-   ******************************/
   get maptype() {
     return this.state.get("maptype");
   }
@@ -4623,9 +4267,6 @@ class MapView extends CustomViewBase {
       this.state.set("maptype", this._normalizedMapType(value));
     }
   }
-  /*****************************
-   * heading property
-   ******************************/
   getHeading() {
     return this.state.get("heading");
   }
@@ -4654,9 +4295,6 @@ class MapView extends CustomViewBase {
       }
     }
   }
-  /*****************************
-   * tilt property
-   ******************************/
   getTilt() {
     return this.state.get("tilt");
   }
@@ -4682,9 +4320,6 @@ class MapView extends CustomViewBase {
       }
     }
   }
-  /*****************************
-   * center property
-   ******************************/
   getCenter() {
     const pos = this.state.get("center");
     return {
@@ -4719,9 +4354,6 @@ class MapView extends CustomViewBase {
       Promise.resolve().then(this._bind_onCameraPropertyChanged);
     }
   }
-  /*****************************
-   * zoom property
-   ******************************/
   getZoom() {
     return this.state.get("zoom");
   }
@@ -4844,9 +4476,6 @@ class MapView extends CustomViewBase {
   get southWest() {
     return this.state.get("southWest");
   }
-  /**
-   * 'id' or 'class'
-   */
   _onRedrawMap(event) {
     if (this.initStatus < HTMLElementBaseStatus.VIEW_CREATED) {
       return;
@@ -4863,9 +4492,6 @@ class MapView extends CustomViewBase {
       super.addEventListener(eventName, listener, options);
     }
   }
-  /**
-   * Invoked each time the custom element is appended into a document-connected element.
-   */
   async connectedCallback() {
     super.connectedCallback();
     if (this.initStatus === HTMLElementBaseStatus.VIEW_CREATING) {
@@ -4951,9 +4577,6 @@ class MapView extends CustomViewBase {
       this.initStatus = HTMLElementBaseStatus.VIEW_CREATED;
     });
   }
-  /**
-   * Invoked each time the custom element is disconnected from the document's DOM.
-   */
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.initStatus === HTMLElementBaseStatus.VIEW_CREATED) {
@@ -4993,9 +4616,6 @@ class Path extends HTMLElementBase {
       }
     }));
   }
-  /**
-   * Involves when child <g-latlng> element(s) is/are added.
-   */
   onChildrenAdded(addedChildren) {
     const childList = Array.from(this.children);
     const indicesWithElements = addedChildren.map((addedChild) => {
@@ -5012,9 +4632,6 @@ class Path extends HTMLElementBase {
       this._path.insertAt(info.index, info.child.toJSON());
     });
   }
-  /**
-   * Involves when child <mkg-latlng> element(s) is/are removed.
-   */
   onChildrenRemoved(children) {
     const indices = children.map((removedChild) => {
       return this._children.indexOf(removedChild);
@@ -5111,8 +4728,8 @@ class Polyline extends Overlay {
       geodesic: this.state.get("geodesic"),
       strokeColor: this.state.get("strokeColor"),
       strokeWidth: this.state.get("strokeWidth"),
-      // strokeStyle: this.state.get('strokeStyle'),
-      zIndex: this.state.get("zIndex")
+      zIndex: this.state.get("zIndex"),
+      extra: this.state.get("extra")
     };
     ["visible", "clickable", "geodesic"].forEach((key) => {
       const propValue = getComputedCSS(this, `mkg-${key}`);
@@ -5133,6 +4750,9 @@ class Polyline extends Overlay {
       currValues.zIndex = parseInt(zIndex.replace(/[^\d].*$/g, ""), 10);
     }
     if (options) {
+      if ("extra" in options) {
+        currValues.extra = options.extra;
+      }
       if (typeof options.visible === "boolean") {
         currValues.visible = options.visible === true;
       }
@@ -5165,9 +4785,6 @@ class Polyline extends Overlay {
       this.state.set(key, currValues[key]);
     });
   }
-  /**
-   * Involved when MVCArray<ILatLng. is modified.
-   */
   _onPathUpdate(event) {
     const detail = event.detail;
     this.execPromise("(parent)", "execute", [{
@@ -5179,9 +4796,6 @@ class Polyline extends Overlay {
       latLng: detail.latLng
     }]);
   }
-  /**
-   * Involved when <mkg-latlng> is added/updated/removed under <mkg-path>
-   */
   onCommandFromChildren(event) {
     console.log(event);
     this._onPathUpdate(event);
@@ -5198,9 +4812,6 @@ class Polyline extends Overlay {
     this._path.removeEventListener("insert_at", this._bind_onUpdate);
     this._path.removeEventListener("remove_at", this._bind_onUpdate);
   }
-  /*****************************
-   * path property
-   ******************************/
   getPath() {
     return this._path;
   }
@@ -5310,9 +4921,6 @@ class Polyline extends Overlay {
       this.state.set("initOptions", void 0);
     });
   }
-  /**
-   * Invoked each time the custom element is disconnected from the document's DOM.
-   */
   async onDisconnected() {
     await super.onDisconnected();
     this.state.removeEventListener("visible_changed", this._bind_onPropertyChanged);
@@ -5487,10 +5095,6 @@ class GooglemapsCore {
         `;
     document.head.appendChild(cssAdjuster);
   }
-  /**
-   * Detects framework
-   * @returns
-   */
   getFrameworkId() {
     if (this._frameworkId) {
       return this._frameworkId;
@@ -5504,10 +5108,6 @@ class GooglemapsCore {
     }
     return this._frameworkId;
   }
-  /**
-   * Detects platform
-   * @returns
-   */
   getPlatformId() {
     if (this._platformId) {
       return this._platformId;
@@ -5539,11 +5139,6 @@ class GooglemapsCore {
     this._platformId = result;
     return result;
   }
-  /**
-   * Return a singletone instance of CommandQueue for queueName namespace
-   * @param queueName
-   * @returns
-   */
   getCommandQueue(queueName) {
     if (!(queueName in this._queues)) {
       this._queues[queueName] = new CommandQueue(queueName);
@@ -5577,13 +5172,13 @@ if (!window.getElementByPluginDomId) {
 }
 if (window.customElements.get("mkg-mapview") === void 0) {
   window.customElements.define("mkg-mapview", MapView);
-  window.customElements.define("mkg-marker", Marker);
+  window.customElements.define("mkg-marker", Marker$1);
   window.customElements.define("mkg-polyline", Polyline);
   window.customElements.define("mkg-infobase", InfoWindowBase);
   window.customElements.define("mkg-infowindow", InfoWindow);
   window.customElements.define("mkg-latlng", LatLng);
   window.customElements.define("mkg-path", Path);
-  window.Marker = Marker;
+  window.Marker = Marker$1;
 }
 class ExGoogleMapsOptions {
   constructor(jsOptions = {}) {
@@ -5723,73 +5318,48 @@ class ExGoogleMapsOptions {
       }
     }
   }
-  // -------------------
-  //  mapId property
-  // -------------------
   set mapId(value) {
     this.options.mapId = value;
   }
   get mapId() {
     return this.options.mapId;
   }
-  // -------------------
-  //  mapTypeId property
-  // -------------------
   set mapTypeId(value) {
     this.options.mapTypeId = this.convertToMapType(value);
   }
   get mapTypeId() {
     return this.options.mapTypeId;
   }
-  // -------------------
-  //  center property
-  // -------------------
   set center(value) {
     this.options.center = value;
   }
   get center() {
     return this.options.center;
   }
-  // -------------------
-  //  tilt property
-  // -------------------
   set tilt(value) {
     this.options.tilt = value || 0;
   }
   get tilt() {
     return this.options.tilt;
   }
-  // -------------------
-  //  heading property
-  // -------------------
   set heading(value) {
     this.options.heading = value || 0;
   }
   get heading() {
     return this.options.heading;
   }
-  // -------------------
-  //  zoom property
-  // -------------------
   set zoom(value) {
     this.options.zoom = Math.min(Math.max(value || 0, 0), 25);
   }
   get zoom() {
     return this.options.zoom;
   }
-  //
-  // -------------------
-  //  minZoom property
-  // -------------------
   set minZoom(value) {
     this.options.minZoom = typeof value === "number" ? Math.min(Math.max(value, 0), 25) : 0;
   }
   get minZoom() {
     return this.options.minZoom;
   }
-  // -------------------
-  //  maxZoom property
-  // -------------------
   set maxZoom(value) {
     this.options.maxZoom = typeof value === "number" ? Math.min(Math.max(value, 0), 25) : null;
   }
@@ -5799,11 +5369,6 @@ class ExGoogleMapsOptions {
   getMapOptions() {
     return JSON.parse(JSON.stringify(this.options));
   }
-  /**
-   * Returns one of the MapTypeId matched with given string
-   * @param mapTypeName  One of the following: normal, hybrid, satellite, and terrain.
-   * @return  One of the GoogleMaps MapTypeID
-   */
   convertToMapType(mapTypeName) {
     if (!mapTypeName) {
       return google.maps.MapTypeId.ROADMAP;
@@ -5908,9 +5473,9 @@ class PluginMarker extends MVCBaseObject {
   getId() {
     return this.id;
   }
-  setMap(map) {
+  setMap(map2) {
     if (this.marker) {
-      this.marker.setMap(map);
+      this.marker.setMap(map2);
     }
   }
   setEventCallback(eventCallback) {
@@ -5923,7 +5488,6 @@ class PluginMarker extends MVCBaseObject {
     const options = args[1];
     return this._gsMarkerOptions(options).then((opts) => {
       if (this.marker) {
-        console.log("setOptions", opts);
         this.marker.setOptions(opts);
       }
     });
@@ -6062,9 +5626,9 @@ class PluginPolyline extends MVCBaseObject {
   getId() {
     return this.id;
   }
-  setMap(map) {
+  setMap(map2) {
     if (this.polyline) {
-      this.polyline.setMap(map);
+      this.polyline.setMap(map2);
     }
   }
   setEventCallback(eventCallback) {
@@ -6208,7 +5772,6 @@ class PluginMap extends MVCBaseObject {
   _onOrientationChanged() {
     this._onCameraEvent("camera:move");
   }
-  // The map camera starts moving or it's still moving.
   _onBoundsChanged() {
     if (this.isMapCameraMoving) {
       return;
@@ -6225,7 +5788,6 @@ class PluginMap extends MVCBaseObject {
     this._onCameraEvent("camera:move");
     window.requestAnimationFrame(this._bind_trackCamera);
   }
-  // The map camera has been stopped
   _onCameraIdle() {
     this.isMapCameraMoving = false;
     this._onCameraEvent("camera:move:end");
@@ -6269,9 +5831,6 @@ class PluginMap extends MVCBaseObject {
     this._onCameraEvent("camera:move");
     return Promise.resolve();
   }
-  /**
-   * Creates a new marker instance
-   */
   createMarker(args) {
     if (!this.map) {
       return Promise.reject(new Error("map is invalid"));
@@ -6285,9 +5844,6 @@ class PluginMap extends MVCBaseObject {
     this.overlays[markerId] = marker;
     return Promise.resolve();
   }
-  /**
-   * Creates a new marker instance
-   */
   createPolyline(args) {
     if (!this.map) {
       return Promise.reject(new Error("map is invalid"));
@@ -6301,9 +5857,6 @@ class PluginMap extends MVCBaseObject {
     this.overlays[polylineId] = polyline;
     return Promise.resolve();
   }
-  /**
-   * Attaches an overlay from this map
-   */
   attachOverlayToMap(args) {
     if (!this.map) {
       return Promise.reject(new Error("map is invalid"));
@@ -6318,9 +5871,6 @@ class PluginMap extends MVCBaseObject {
       return Promise.reject(new Error(`can not find overlay2: ${overlayId}`));
     }
   }
-  /**
-   * Detaches an overlay from this map
-   */
   detachOverlayFromMap(args) {
     if (!this.map) {
       return Promise.reject(new Error("map is invalid"));
@@ -6334,26 +5884,6 @@ class PluginMap extends MVCBaseObject {
     });
     return Promise.resolve();
   }
-  //
-  // public addRectangle(
-  //	 args: any[]
-  // ): Promise<void> {
-  //	 if (!this.map) {
-  //		 return Promise.reject(new Error('map is invalid'));
-  //	 }
-  //
-  //	 const options: {
-  //		 bounds: google.maps.LatLngBoundsLiteral
-  //	 } = args[0];
-  //
-  //	 const rectangle: google.maps.Rectangle = new google.maps.Rectangle(options);
-  //	 rectangle.setMap(this.map);
-  //
-  //	 return Promise.resolve();
-  // }
-  /**
-   * Sets camera position to the specified position
-   */
   moveCamera(args) {
     if (!this.map) {
       return Promise.reject(new Error("map is invalid"));
@@ -6478,9 +6008,6 @@ class PluginMap extends MVCBaseObject {
   easeInOutQuart(t) {
     return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
   }
-  /**
-   * Invoked when this instance is attacned to <body>
-   */
   onAttached() {
     return new Promise((resolve, reject) => {
       if (!this.map) {
@@ -6503,9 +6030,6 @@ class PluginMap extends MVCBaseObject {
       this._onCameraEvent("camera:move2");
     });
   }
-  /**
-   * Invoked when this instance is detached from <body>
-   */
   onReleased() {
     if (!this.map) {
       return Promise.reject(new Error("map is invalid"));
@@ -6523,14 +6047,9 @@ class PluginMap extends MVCBaseObject {
       restriction: void 0,
       minZoom: void 0,
       maxZoom: void 0
-      // Can't change the jsMapId after map has been constructed.
-      // jsMapId: undefined
     });
     return Promise.resolve();
   }
-  /**
-   * Releases an overlay
-   */
   releaseOverlay(args = []) {
     const overlayIDs = args;
     overlayIDs.forEach((overlayId) => {
@@ -6539,11 +6058,6 @@ class PluginMap extends MVCBaseObject {
     });
     return Promise.resolve();
   }
-  /**
-   * Fires a camera event on map
-   * @private
-   * @params {eventName} event name
-   */
   _onCameraEvent(eventName) {
     if (!eventName || !this.map || !this.overlayView) {
       return;
@@ -6606,8 +6120,6 @@ class PluginMap extends MVCBaseObject {
       detail: cameraStatus
     }));
   }
-  // Create a homography matrix from given 4 coordinate points.
-  // https://mu-777.hatenablog.com/entry/2020/02/02/185012
   calcHomographyMatrix(farLeftPx, farRightPx, nearRightPx, nearLeftPx) {
     const x00 = farLeftPx.x;
     const y00 = farLeftPx.y;
@@ -6655,12 +6167,6 @@ class PluginMap extends MVCBaseObject {
     const o33 = (i11 * i22 - i12 * i21) / a;
     return [o11, o12, o13, o21, o22, o23, o31, o32, o33];
   }
-  /**
-   * Fires a normal event on map
-   * @private
-   * @params {eventName} event name
-   * @params {event} actual event
-   */
   _onMapEvent(eventName) {
     if (!eventName) {
       return;
@@ -6671,12 +6177,6 @@ class PluginMap extends MVCBaseObject {
     }
     mapView.dispatchEvent(new Event(eventName));
   }
-  /**
-   * Fires a mouse event on map
-   * @private
-   * @params {eventName} event name
-   * @params {event} actual event
-   */
   _onMouseEvent(eventName, event) {
     if (!eventName || !event) {
       return;
@@ -6695,12 +6195,6 @@ class PluginMap extends MVCBaseObject {
       }
     }));
   }
-  /**
-   * Fires a normal event from overlays
-   * @private
-   * @params {eventName} event name
-   * @params {event} actual event
-   */
   _onOverlayEvent(overlayId, event) {
     if (!overlayId || !event) {
       return;
@@ -6717,8 +6211,15 @@ const GoogleMapsWeb = new class {
     this.viewInstances = {};
     this.initOptions = {};
   }
+  forRoot(options = {}) {
+    if (!options) {
+      return this;
+    }
+    const apiKey = "jsApiKey" in options ? options.jsApiKey : void 0;
+    this.loadGoogleMapsJS(apiKey);
+    return this;
+  }
   async onInit(platformId, options) {
-    this.loadGoogleMapsJS(options.jsApiKey);
   }
   onWindowReady() {
     console.log("window.ready");
@@ -6737,9 +6238,6 @@ const GoogleMapsWeb = new class {
       throw new Error(`Can not find ${pluginName} plugin`);
     }
   }
-  /**
-   * Creates a new instance of PluginMap class
-   */
   createMapView(args = []) {
     const metaInfo = args[0];
     const viewId = metaInfo.id;
@@ -6750,9 +6248,6 @@ const GoogleMapsWeb = new class {
     this.viewInstances[viewId] = pluginView;
     return pluginView.setOptions([mapOptions]);
   }
-  /**
-   * Attaches the view instance to the speicified <g-mapview> element
-   */
   attachToWindow(args = []) {
     const options = args[0];
     const viewId = options.id;
@@ -6783,9 +6278,6 @@ const GoogleMapsWeb = new class {
     }
     return Promise.resolve();
   }
-  /**
-   * Loads Google Maps JavaScript v3 API
-   */
   async loadGoogleMapsJS(jsApiKey) {
     if ("google" in window && "maps" in window.google) {
       return;
@@ -6834,18 +6326,79 @@ const GoogleMapsWeb = new class {
     return Promise.resolve();
   }
 }();
-const init = async () => {
-  window.mkgeeklab.googlemaps.setUp({
-    bridge: {
-      browser: GoogleMapsWeb
-    }
-  });
-  const markers = Array.from(document.getElementsByTagName("mkg-marker"));
-  const latLngList = Array.from(document.getElementsByTagName("mkg-latlng"));
-  markers.forEach((marker, idx) => {
-    marker.addEventListener("position_changed", (evt) => {
-      latLngList[idx].setPosition(evt.detail.value);
-    });
-  });
+window.mkgeeklab.googlemaps.setUp({
+  bridge: {
+    browser: GoogleMapsWeb.forRoot({
+      jsApiKey: `AIzaSyBpNKkll5yJ2YbS-i0dE5yIdEk8sef-S6g`
+    })
+  }
+});
+class Application {
+  constructor(mapElement) {
+    __privateAdd(this, _getRandomColor);
+    __privateAdd(this, _onMapClick);
+    __privateAdd(this, _onMarkerClick);
+    __privateAdd(this, _info, new InfoWindow());
+    __privateAdd(this, _map, void 0);
+    __privateAdd(this, _counter, 1);
+    __privateSet(this, _map, mapElement);
+    mapElement.appendChild(__privateGet(this, _info));
+    map.addEventListener("click", (event) => __privateMethod(this, _onMapClick, onMapClick_fn).call(this, event));
+  }
+}
+_info = new WeakMap();
+_map = new WeakMap();
+_counter = new WeakMap();
+_getRandomColor = new WeakSet();
+getRandomColor_fn = function() {
+  const R = Math.floor(255 * Math.random());
+  const G = Math.floor(255 * Math.random());
+  const B = Math.floor(255 * Math.random());
+  return `rgb(${R}, ${G}, ${B})`;
 };
-init();
+_onMapClick = new WeakSet();
+onMapClick_fn = function(event) {
+  const marker = new Marker(
+    {
+      position: event.detail.latLng,
+      icon: __privateMethod(this, _getRandomColor, getRandomColor_fn).call(this),
+      extra: {
+        lat: event.detail.latLng.lat,
+        lng: event.detail.latLng.lng,
+        cnt: __privateWrapper(this, _counter)._++
+      }
+    }
+  );
+  marker.addEventListener("click", (event2) => __privateMethod(this, _onMarkerClick, onMarkerClick_fn).call(this, event2));
+  __privateGet(this, _map).appendChild(marker);
+  setTimeout(() => {
+    marker.dispatchEvent(new Event("click"));
+  }, 300);
+};
+_onMarkerClick = new WeakSet();
+onMarkerClick_fn = function(event) {
+  const marker = event.target;
+  console.log(marker.extra);
+  const text = `
+        <table border=1>
+        <tr>
+            <th>cnt</th>
+            <td>${marker.extra.cnt}</td>
+        </tr>
+        <tr>
+            <th>latitude</th>
+            <td>${marker.extra.lat}</td>
+        </tr>
+        <tr>
+            <th>longitude</th>
+            <td>${marker.extra.lng}</td>
+        </tr>
+        </table>
+        `;
+  __privateGet(this, _info).setContent(text);
+  __privateGet(this, _info).open(marker);
+};
+const map = document.getElementById("map_canvas");
+new Application(
+  map
+);
