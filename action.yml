@@ -1,0 +1,26 @@
+name: 'Build example'
+description: 'Generate examples with specified version'
+
+inputs:
+  core_plugin_versison: 
+    description: 'The version of the @mkgeeklab/googlemaps-core-common plugin'
+    required: false
+    default: 'latest'
+    
+  browser_plugin_version:
+    description: 'The version of the @mkgeeklab/googlemaps-platform-browser plugin'
+    required: false
+    default: 'latest'
+
+outputs:
+  page-url:
+    description: "page-url"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+runs:
+  using: "composite"
+  steps:
+    - name: build-and-publish
+      uses: ./.github/workflows/publish.yml
+      with:
+        core_plugin_versison: '${{ github.event.inputs.core_plugin_versison }}'
+        browser_plugin_version: '${{ github.event.inputs.browser_plugin_version }}'

@@ -1,0 +1,87 @@
+import { InfoWindow } from '@mkgeeklab/googlemaps-core-common';
+import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
+
+window.mkgeeklab.googlemaps.setUp({
+    bridge: {
+        browser: GoogleMapsWeb.forRoot({
+            jsApiKey: "something",
+        }),
+    },
+});
+
+class Application {
+
+    #info = new InfoWindow();
+    #map;
+    #counter = 1;
+
+    constructor(mapElement) {
+        this.#map = mapElement;
+        mapElement.appendChild(this.#info);
+        map.addEventListener('click', (event) => this.#onMapClick(event));
+    }
+
+
+    #getRandomColor() {
+        const R = Math.floor(255 * Math.random());
+        const G = Math.floor(255 * Math.random());
+        const B = Math.floor(255 * Math.random());
+        return `rgb(${R}, ${G}, ${B})`;
+    }
+
+    #onMapClick(event) {
+        const marker = new Marker(
+            {
+                position: event.detail.latLng,
+
+                icon: this.#getRandomColor(),
+
+                // The 'extra' property keeps any data
+                extra: {
+                    lat: event.detail.latLng.lat,
+                    lng: event.detail.latLng.lng,
+                    cnt: this.#counter++,
+                }
+            }
+        );
+        
+        marker.addEventListener('click', (event) => this.#onMarkerClick(event));
+        this.#map.appendChild(marker);
+
+        setTimeout(() => {
+            marker.dispatchEvent(new Event('click'));
+        }, 300);
+    }
+    
+    #onMarkerClick(event) {
+        const marker = event.target;
+        console.log(marker.extra);
+
+        const text = `
+        <table border=1>
+        <tr>
+            <th>cnt</th>
+            <td>${marker.extra.cnt}</td>
+        </tr>
+        <tr>
+            <th>latitude</th>
+            <td>${marker.extra.lat}</td>
+        </tr>
+        <tr>
+            <th>longitude</th>
+            <td>${marker.extra.lng}</td>
+        </tr>
+        </table>
+        `;
+        this.#info.setContent(text);
+        this.#info.open(marker);
+    }
+}
+
+
+
+const map = document.getElementById("map_canvas");
+const app = new Application(
+    map,
+
+);

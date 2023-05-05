@@ -1,25 +1,47 @@
 #!/bin/bash
 
-PACKAGE_JSON_PATH="$1"
-OUT_DIR_PATH="$2"
-NPM_ACCESS_TOKEN="$3"
+#--------------------------
+# parse the arguments
+#--------------------------
+for ARGUMENT in "$@"
+do
+   KEY=$(echo $ARGUMENT | cut -f1 -d=)
 
-EXAMPLE_DIR="$(dirname $1)"
+   KEY_LENGTH=${#KEY}
+   VALUE="${ARGUMENT:$KEY_LENGTH+1}"
+
+   export "$KEY"="$VALUE"
+done
+
+INPUT_PARENT_DIR="$(dirname ${INPUT_FILE_PATH})"
+echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${INPUT_PARENT_DIR}/.npmrc"
+
+INPUT_PARENT_DIR_NAME="$(basename $INPUT_PARENT_DIR)"
+rm -f ${INPUT_PARENT_DIR}/package-lock.json
+
+#--------------------------
+# modify the package.json
+#--------------------------
+export NODE_CODE=$(
+cat <<__EOS__
+const fs=require('node:fs');
+
+const packagejson=JSON.parse(fs.readFileSync('$INPUT_FILE_PATH').toString());
+packagejson.dependencies["@mkgeeklab/googlemaps-core-common"]="${CORE_PLUGIN_VERSION}";
+packagejson.dependencies["@mkgeeklab/googlemaps-platform-browser"]="${BROWSER_PLUGIN_VERSION}";
+fs.writeFileSync('$INPUT_FILE_PATH', JSON.stringify(packagejson, null, true));
+__EOS__
+)
+node -e "${NODE_CODE}"
+
+#-------------------
+# install & build
+#-------------------
 CWD=$(pwd)
-cd $EXAMPLE_DIR
-echo "//registry.npmjs.org/:_authToken=${NPM_ACCESS_TOKEN}" > .npmrc
-
-EXAMPLE_DIR_NAME="$(basename $EXAMPLE_DIR)"
-
-echo "----> EXAMPLE_DIR : ${EXAMPLE_DIR}"
-echo "----> EXAMPLE_DIR_NAME : ${EXAMPLE_DIR_NAME}"
-echo "----> OUT_DIR_PATH : ${OUT_DIR_PATH}"
-
-rm package-lock.json
-sed -i 's/"file:.*"/"latest"/g' package.json
+cd $INPUT_PARENT_DIR
 npm i
 npm run build
 # tree -I node_modules -a
 
 cd $CWD
-mv "${EXAMPLE_DIR}/dist" "${OUT_DIR_PATH}/${EXAMPLE_DIR_NAME}"
+mv "${INPUT_PARENT_DIR}/dist" "${OUT_DIR_PATH}/${INPUT_PARENT_DIR_NAME}"

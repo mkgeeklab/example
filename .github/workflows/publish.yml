@@ -1,10 +1,34 @@
 name: page publish
 
 on:
-  push:
-    branches:
-      - "main"
+  workflow_dispatch:
+    inputs:
+      core_plugin_versison: 
+        description: 'The version of the @mkgeeklab/googlemaps-core-common plugin'
+        required: false
+        default: 'latest'
+        type: string
 
+      browser_plugin_version:
+        description: 'The version of the @mkgeeklab/googlemaps-platform-browser plugin'
+        required: false
+        default: 'latest'
+        type: string
+    
+  workflow_call:
+    inputs:
+      core_plugin_versison: 
+        description: 'The version of the @mkgeeklab/googlemaps-core-common plugin'
+        required: false
+        default: 'latest'
+        type: string
+
+      browser_plugin_version:
+        description: 'The version of the @mkgeeklab/googlemaps-platform-browser plugin'
+        required: false
+        default: 'latest'
+        type: string
+        
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -12,21 +36,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Create cache key file
-        run: |
-          find . -name "package.json" | xargs -I {} md5sum {} > list.txt
-      
       - name: cache
         uses: actions/cache@v3
         with:
           path: dist
-          key: -${{ hashFiles('**/package.json') }}
+          key: ${{ hashFiles('**/*.(js|css|html)') }}
       
       - name: Setup Node
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
+      - name: Replace Google Maps API keys
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          find . -name "package.json" -exec \
+            sed -i 's/${GOOGLE_MAPS_JS_KEY}/${{secrets.GOOGLE_MAPS_API_KEY}}/g' {} \;
 
       - name: Modify package.json
         if: steps.cache.outputs.cache-hit != 'true'
@@ -35,7 +61,12 @@ jobs:
           chmod +x ./capacitor/purejs/build.sh
 
           find ./capacitor/purejs -name "package.json" \
-            -exec ./capacitor/purejs/build.sh {} dist/capacitor/purejs/ ${{secrets.NPM_READ_ONLY_TOKEN}} \;
+            -exec ./capacitor/purejs/build.sh \
+              INPUT_FILE_PATH={} \
+              OUT_DIR_PATH=dist/capacitor/purejs/ \
+              NPM_TOKEN=${{secrets.NPM_READ_ONLY_TOKEN}} \
+              CORE_PLUGIN_VERSION=${{ github.event.inputs.core_plugin_versison }} \
+              BROWSER_PLUGIN_VERSION=${{ github.event.inputs.browser_plugin_version }} \;
       
       - name: Modify package.json
         if: steps.cache.outputs.cache-hit != 'true'

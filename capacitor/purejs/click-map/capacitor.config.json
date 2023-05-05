@@ -1,6 +1,6 @@
 {
-  "appId": "mkgeeklab.example.capacitor.purejs",
-  "appName": "capacitor+purejs",
+  "appId": "mkgeeklab.example.purejs.clickmap",
+  "appName": "click_map",
   "bundledWebRuntime": false,
   "webDir": "dist",
   "plugins": {
