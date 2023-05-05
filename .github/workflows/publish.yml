@@ -47,7 +47,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: dist
-          key: ${{ hashFiles('**/*.(js|css|html)') }}
+          key: ${{ hashFiles('capacitor/**/*.js', 'capacitor/**/*.css', 'capacitor/**/*.html') }}
       
       - name: Setup Node
         if: steps.cache.outputs.cache-hit != 'true'
