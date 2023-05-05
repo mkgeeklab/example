@@ -4,7 +4,7 @@ import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
 const getMapsApiKey = () => {
     try {
         // Replaced in Github Actions
-        return $GOOGLE_MAPS_JS_KEY;
+        return `$GOOGLE_MAPS_JS_KEY`;
     } catch (e) {
         return '';
     }
