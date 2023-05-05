@@ -14,32 +14,11 @@ on:
         required: false
         default: 'latest'
         type: string
-    
-  workflow_call:
-    inputs:
-      core_plugin_versison: 
-        description: 'The version of the @mkgeeklab/googlemaps-core-common plugin'
-        required: false
-        default: 'latest'
-        type: string
-
-      browser_plugin_version:
-        description: 'The version of the @mkgeeklab/googlemaps-platform-browser plugin'
-        required: false
-        default: 'latest'
-        type: string
         
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        run: |
-          echo "core_plugin_versison: ${{ github.event.inputs.core_plugin_versison }}"
-          echo "browser_plugin_version: ${{ github.event.inputs.browser_plugin_version }}"
-          echo "NPM_READ_ONLY_TOKEN: ${{ secrets.NPM_READ_ONLY_TOKEN }}"
-          echo "GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}"
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -59,7 +38,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           find . -name "*.js" -exec \
-            sed -i 's/\${GOOGLE_MAPS_JS_KEY}/${{secrets.GOOGLE_MAPS_API_KEY}}/g' {} \;
+            sed -i 's/\$GOOGLE_MAPS_JS_KEY/${{secrets.GOOGLE_MAPS_API_KEY}}/g' {} \;
 
       - name: Modify package.json
         if: steps.cache.outputs.cache-hit != 'true'

@@ -1,10 +1,19 @@
 import { InfoWindow } from '@mkgeeklab/googlemaps-core-common';
 import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
 
+const getMapsApiKey = () => {
+    try {
+        // Replaced in Github Actions
+        return $GOOGLE_MAPS_JS_KEY;
+    } catch (e) {
+        return '';
+    }
+}
+
 window.mkgeeklab.googlemaps.setUp({
     bridge: {
         browser: GoogleMapsWeb.forRoot({
-            jsApiKey: `${GOOGLE_MAPS_JS_KEY}`,
+            jsApiKey: getMapsApiKey(),
         }),
     },
 });
