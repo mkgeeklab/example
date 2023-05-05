@@ -17,15 +17,17 @@ jobs:
 
       - name: Modify package.json
         run: |
-          cd capacitor/purejs
-          ls -l
-          find . -name "package.json" -exec sed -i 's/"file:.*"/"latest"/g' {} \;
           echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_ACCESS_TOKEN}}" > .npmrc
-          rm package-lock.json
-          npm i
-          npm run build
+          mkdir -p dist/capacitor/purejs/
+          chmod +x ./capacitor/purejs/build.sh
+
+          find ./capacitor/purejs -name "package.json" \
+            -exec ./capacitor/purejs/build.sh {} dist/capacitor/purejs/ \;
       
+      - name: Modify package.json
+        run: tree dist
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: capacitor/purejs/dist
+          folder: dist
