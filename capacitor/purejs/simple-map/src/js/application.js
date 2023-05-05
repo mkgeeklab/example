@@ -5,7 +5,9 @@ const init = async () => {
     // console.log('--->init')
     window.mkgeeklab.googlemaps.setUp({
         bridge: {
-            browser: GoogleMapsWeb,
+            browser: GoogleMapsWeb.forRoot({
+                jsApiKey: `${GOOGLE_MAPS_JS_KEY}`,
+            }),
         },
     });
 

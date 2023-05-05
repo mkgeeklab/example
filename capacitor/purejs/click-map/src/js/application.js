@@ -4,7 +4,7 @@ import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
 window.mkgeeklab.googlemaps.setUp({
     bridge: {
         browser: GoogleMapsWeb.forRoot({
-            jsApiKey: "something",
+            jsApiKey: `${GOOGLE_MAPS_JS_KEY}`,
         }),
     },
 });

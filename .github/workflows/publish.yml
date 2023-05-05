@@ -51,7 +51,7 @@ jobs:
       - name: Replace Google Maps API keys
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          find . -name "package.json" -exec \
+          find . -name "*.js" -exec \
             sed -i 's/${GOOGLE_MAPS_JS_KEY}/${{secrets.GOOGLE_MAPS_API_KEY}}/g' {} \;
 
       - name: Modify package.json
