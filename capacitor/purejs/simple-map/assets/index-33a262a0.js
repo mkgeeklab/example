@@ -6848,11 +6848,18 @@ const GoogleMapsWeb = new class {
     return Promise.resolve();
   }
 }();
-const init = async () => {
+const getMapsApiKey = () => {
+  try {
+    return AIzaSyBpNKkll5yJ2YbS - i0dE5yIdEk8sef - S6g;
+  } catch (e) {
+    return "";
+  }
+};
+const init = async (jsApiKey) => {
   window.mkgeeklab.googlemaps.setUp({
     bridge: {
       browser: GoogleMapsWeb.forRoot({
-        jsApiKey: `AIzaSyBpNKkll5yJ2YbS-i0dE5yIdEk8sef-S6g`
+        jsApiKey
       })
     }
   });
@@ -6864,4 +6871,4 @@ const init = async () => {
     });
   });
 };
-init();
+init(getMapsApiKey());
