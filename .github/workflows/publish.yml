@@ -48,4 +48,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist/capacitor/purejs/
+          folder: dist/
