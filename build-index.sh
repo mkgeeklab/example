@@ -1,7 +1,8 @@
 #!/bin/bash
 
 TARGET_PATH=$1
-OUTPUT_FILE="${TARGET_PATH}/index.html"
+OUTPUT_FILE=$2
+OUTPUT_DIR=$(dirname $OUTPUT_FILE)
 
 printHeader() {
 
@@ -30,7 +31,6 @@ printRow() {
     echo "</li>"  >> $OUTPUT_FILE
 }
 
-mkdir dist
 printHeader
 
 for build_dir_path in $(find $TARGET_PATH -type d -name node_modules -prune -false -o -type d -name "build")
@@ -40,7 +40,7 @@ do
     title=$(grep "<title>" "${build_dir_path}/index.html" | sed -E 's/.*<title>(.*?)<\/title>/\1/')
     description=$(grep 'name="description"' "${build_dir_path}/index.html" | sed -E 's/.*content="(.+?)".*>/\1/')
 
-    mv $build_dir_path ./dist/${proj_name}
+    mv $build_dir_path "${OUTPUT_DIR}/${proj_name}"
     printRow $proj_name "${title}" "${description}" "./${proj_name}/index.html"
 done
 

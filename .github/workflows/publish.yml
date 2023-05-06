@@ -49,7 +49,6 @@ jobs:
           find ./capacitor/purejs -name "package.json" \
             -exec ./capacitor/purejs/build.sh \
               INPUT_FILE_PATH={} \
-              OUT_DIR_PATH=dist/capacitor/purejs/ \
               NPM_TOKEN=${{secrets.NPM_READ_ONLY_TOKEN}} \
               CORE_PLUGIN_VERSION=${{ github.event.inputs.core_plugin_versison }} \
               BROWSER_PLUGIN_VERSION=${{ github.event.inputs.browser_plugin_version }} \;
@@ -57,12 +56,13 @@ jobs:
       - name: Modify package.json
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          chmod +x ./capacitor/build-index.sh
-          cd dist/
-          ../capacitor/build-index.sh .
+          chmod +x ./build-index.sh
+          ./build-index.sh capacitor/purejs dist/capacitor/purejs/index.html 
+          tree dist/
+          cat dist/capacitor/purejs/index.html 
 
       - name: Deploy 🚀
         if: steps.cache.outputs.cache-hit != 'true'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist/
+          folder: dist/capacitor/purejs/

@@ -44,4 +44,3 @@ npm run build
 # tree -I node_modules -a
 
 cd $CWD
-mv "${INPUT_PARENT_DIR}/dist" "${OUT_DIR_PATH}/${INPUT_PARENT_DIR_NAME}"
