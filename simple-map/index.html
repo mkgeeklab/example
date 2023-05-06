@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Display a map and markers</title>
+    <meta name="keywords" content="js, event, click" />
+    <meta name="description" content="Display a google maps and markers." />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    
+    
+    <script type="module" crossorigin src="./assets/index-2b614191.js"></script>
+    <link rel="stylesheet" href="./assets/index-0436559a.css">
+  </head>
+  <body>
+    <section id="explain">
+      Try to drag red markers.
+    </section>
+    <mkg-mapview
+      id="map_canvas"
+      center="38,-137"
+      zoom="3">
+  
+      <mkg-marker position="28,-117" class="startMarker"></mkg-marker>
+      <mkg-marker position="40,-133" class="draggable"></mkg-marker>
+      <mkg-marker position="39,-128" class="draggable"></mkg-marker>
+      <mkg-marker position="52,-140" class="endMarker"></mkg-marker>
+
+      <mkg-polyline class="yellow-line">
+        <mkg-path>
+          <mkg-latlng lat="28" lng="-117"></mkg-latlng>
+          <mkg-latlng lat="40" lng="-133"></mkg-latlng>
+          <mkg-latlng lat="39" lng="-128"></mkg-latlng>
+          <mkg-latlng lat="52" lng="-140"></mkg-latlng>
+        </mkg-path>
+      </mkg-polyline>
+    </mkg-mapview>
+  </body>
+</html>
