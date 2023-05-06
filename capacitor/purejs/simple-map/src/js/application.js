@@ -29,4 +29,8 @@ const init = async (jsApiKey) => {
         });
     })
 };
-init(getMapsApiKey());
+
+window.addEventListener("DOMContentLoaded", (event) => {
+    init(getMapsApiKey());
+});
+  

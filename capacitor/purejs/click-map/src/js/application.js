@@ -1,4 +1,4 @@
-import { InfoWindow } from '@mkgeeklab/googlemaps-core-common';
+import { InfoWindow, Marker } from '@mkgeeklab/googlemaps-core-common';
 import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
 
 const getMapsApiKey = () => {
@@ -19,6 +19,8 @@ window.mkgeeklab.googlemaps.setUp({
 });
 
 class Application {
+    // '#' denotes 'private'
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields
 
     #info = new InfoWindow();
     #map;
@@ -92,5 +94,4 @@ class Application {
 const map = document.getElementById("map_canvas");
 const app = new Application(
     map,
-
 );
