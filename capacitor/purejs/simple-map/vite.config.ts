@@ -5,7 +5,7 @@ export default defineConfig({
   base: './',
   build: {
     outDir: '../build',
-    minify: false,
+    minify: true,
     emptyOutDir: true,
   },
 });
