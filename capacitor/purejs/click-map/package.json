@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
+    "terser": "^5.17.1",
     "vite": "^2.9.13"
   },
   "author": "",
