@@ -10,7 +10,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:sync": "vite build --minify false & npx cap sync"
   },
   "dependencies": {
     "@capacitor/android": "^5.0.1",
