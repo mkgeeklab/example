@@ -2,10 +2,13 @@
   "appId": "mkgeeklab.example.purejs.simplemap",
   "appName": "capacitor+purejs",
   "bundledWebRuntime": false,
-  "webDir": "dist",
+  "webDir": "build",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
     }
+  },
+  "android": {
+    "webContentsDebuggingEnabled": true
   }
 }

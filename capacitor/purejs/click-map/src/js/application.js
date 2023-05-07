@@ -12,10 +12,9 @@ const getMapsApiKey = () => {
 
 window.mkgeeklab.googlemaps.setUp({
     bridge: {
-        browser: GoogleMapsWeb.forRoot({
-            jsApiKey: getMapsApiKey(),
-        }),
+        browser: GoogleMapsWeb,
     },
+    jsApiKey: getMapsApiKey(),
 });
 
 class Application {

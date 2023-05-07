@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">capacitor+purejs</string>
+    <string name="title_activity_main">capacitor+purejs</string>
+    <string name="package_name">mkgeeklab.example.purejs.simplemap</string>
+    <string name="custom_url_scheme">mkgeeklab.example.purejs.simplemap</string>
+</resources>

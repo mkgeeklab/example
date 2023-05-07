@@ -13,13 +13,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^5.0.1",
     "@capacitor/core": "latest",
-    "@mkgeeklab/googlemaps-core-common": "file:../../../googlemaps-core-common",
-    "@mkgeeklab/googlemaps-platform-browser": "file:../../../googlemaps-platform-browser"
+    "@capacitor/ios": "^5.0.1",
+    "@mkgeeklab/googlemaps-bridge-capacitor": "file:../../../../bridge/capacitor",
+    "@mkgeeklab/googlemaps-core-common": "file:../../../../googlemaps-core-common",
+    "@mkgeeklab/googlemaps-platform-browser": "file:../../../../googlemaps-platform-browser"
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
-    "vite": "^4.3.2"
+    "terser": "^5.17.1",
+    "vite": "^4.3.5"
   },
   "author": "",
   "license": "ISC"

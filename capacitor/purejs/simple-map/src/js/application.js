@@ -1,5 +1,6 @@
 import {} from '@mkgeeklab/googlemaps-core-common';
 import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
+import { CapacitorBridge } from '@mkgeeklab/googlemaps-bridge-capacitor';
 
 const getMapsApiKey = () => {
     try {
@@ -14,10 +15,10 @@ const init = async (jsApiKey) => {
     // console.log('--->init')
     window.mkgeeklab.googlemaps.setUp({
         bridge: {
-            browser: GoogleMapsWeb.forRoot({
-                jsApiKey,
-            }),
+            browser: GoogleMapsWeb,
+            android: CapacitorBridge,
         },
+        jsApiKey,
     });
 
     const markers = Array.from(document.getElementsByTagName('mkg-marker'));
