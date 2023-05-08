@@ -29,6 +29,7 @@ const fs=require('node:fs');
 const packagejson=JSON.parse(fs.readFileSync('$INPUT_FILE_PATH').toString());
 packagejson.dependencies["@mkgeeklab/googlemaps-core-common"]="${CORE_PLUGIN_VERSION}";
 packagejson.dependencies["@mkgeeklab/googlemaps-platform-browser"]="${BROWSER_PLUGIN_VERSION}";
+packagejson.dependencies["@mkgeeklab/googlemaps-bridge-capacitor"]="${BRIDGE_PLUGIN_VERSION}";
 fs.writeFileSync('$INPUT_FILE_PATH', JSON.stringify(packagejson, null, true));
 __EOS__
 )

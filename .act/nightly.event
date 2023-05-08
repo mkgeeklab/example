@@ -3,5 +3,6 @@
     "inputs": {
         "core_plugin_versison": "nightly",
         "browser_plugin_version": "nightly"
+        "bridge_plugin_version": "nightly"
     }
 }

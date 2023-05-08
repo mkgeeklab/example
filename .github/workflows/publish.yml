@@ -14,6 +14,12 @@ on:
         required: false
         default: 'latest'
         type: string
+
+      bridge_plugin_version:
+        description: 'The version of the @mkgeeklab/googlemaps-bridge-capacitor plugin'
+        required: false
+        default: 'latest'
+        type: string
         
 jobs:
   build-and-publish:
@@ -51,7 +57,8 @@ jobs:
               INPUT_FILE_PATH={} \
               NPM_TOKEN=${{secrets.NPM_READ_ONLY_TOKEN}} \
               CORE_PLUGIN_VERSION=${{ github.event.inputs.core_plugin_versison }} \
-              BROWSER_PLUGIN_VERSION=${{ github.event.inputs.browser_plugin_version }} \;
+              BROWSER_PLUGIN_VERSION=${{ github.event.inputs.browser_plugin_version }} \
+              BRIDGE_PLUGIN_VERSION=${{ github.event.inputs.bridge_plugin_version }} \;
       
       - name: Modify package.json
         if: steps.cache.outputs.cache-hit != 'true'
