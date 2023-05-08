@@ -1,0 +1,1 @@
+html,body{padding:0;margin:0;position:relative;width:100%;height:100%;display:flex;flex-direction:column}section#explain{padding:1em}mkg-mapview{width:100%;height:100%;flex:auto 1 1}.draggable{--mkg-draggable: true}.yellow-line{--mkg-stroke-color: yellow;--mkg-stroke-width: 3}.startMarker{--mkg-icon: lightgreen}.endMarker{--mkg-icon: url(../img/flags-icon-png-10272.png)}
