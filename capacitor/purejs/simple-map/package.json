@@ -17,9 +17,9 @@
     "@capacitor/android": "^5.0.1",
     "@capacitor/core": "latest",
     "@capacitor/ios": "^5.0.1",
-    "@mkgeeklab/googlemaps-core-common": "file:../../../../googlemaps-core-common",
-    "@mkgeeklab/googlemaps-platform-browser": "file:../../../../googlemaps-platform-browser",
-    "@mkgeeklab/googlemaps-platform-capacitor": "file:../../../../googlemaps-platform-capacitor"
+    "@mkgeeklab/googlemaps-core-common": "^0.0.8-nightly-20230507-0902-6d8e9f8",
+    "@mkgeeklab/googlemaps-platform-browser": "^0.0.7-nightly-20230507-0903-fcd046d",
+    "@mkgeeklab/googlemaps-platform-capacitor": "^0.0.1-nightly-20230508-0255-0c0bded"
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
