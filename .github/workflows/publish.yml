@@ -60,7 +60,7 @@ jobs:
               BROWSER_PLUGIN_VERSION=${{ github.event.inputs.browser_plugin_version }} \
               BRIDGE_PLUGIN_VERSION=${{ github.event.inputs.bridge_plugin_version }} \;
       
-      - name: Modify package.json
+      - name: Creates the index.html
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           chmod +x ./build-index.sh

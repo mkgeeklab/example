@@ -1,6 +1,6 @@
 import {} from '@mkgeeklab/googlemaps-core-common';
 import { GoogleMapsWeb } from '@mkgeeklab/googlemaps-platform-browser';
-import { CapacitorBridge } from '@mkgeeklab/googlemaps-bridge-capacitor';
+import { CapacitorBridge } from '@mkgeeklab/googlemaps-platform-capacitor';
 
 const getMapsApiKey = () => {
     try {

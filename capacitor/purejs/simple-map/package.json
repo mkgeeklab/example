@@ -17,9 +17,9 @@
     "@capacitor/android": "^5.0.1",
     "@capacitor/core": "latest",
     "@capacitor/ios": "^5.0.1",
-    "@mkgeeklab/googlemaps-bridge-capacitor": "file:../../../../bridge/capacitor",
     "@mkgeeklab/googlemaps-core-common": "file:../../../../googlemaps-core-common",
-    "@mkgeeklab/googlemaps-platform-browser": "file:../../../../googlemaps-platform-browser"
+    "@mkgeeklab/googlemaps-platform-browser": "file:../../../../googlemaps-platform-browser",
+    "@mkgeeklab/googlemaps-platform-capacitor": "file:../../../../googlemaps-platform-capacitor"
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
