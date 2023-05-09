@@ -2,5 +2,5 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
-include ':mkgeeklab-googlemaps-bridge-capacitor'
-project(':mkgeeklab-googlemaps-bridge-capacitor').projectDir = new File('../../../../../bridge/capacitor/android')
+include ':mkgeeklab-googlemaps-platform-capacitor'
+project(':mkgeeklab-googlemaps-platform-capacitor').projectDir = new File('../node_modules/@mkgeeklab/googlemaps-platform-capacitor/android')

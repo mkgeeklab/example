@@ -4,13 +4,13 @@ import android.os.Bundle;
 
 import com.getcapacitor.BridgeActivity;
 
-import mkgeeklab.bridge.capacitor.CapacitorBridge;
+import mkgeeklab.bridge.capacitor.GoogleMapsCapacitorPlugin;
 
 public class MainActivity extends BridgeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerPlugin(CapacitorBridge.class);
+        registerPlugin(GoogleMapsCapacitorPlugin.class);
     }
 }
