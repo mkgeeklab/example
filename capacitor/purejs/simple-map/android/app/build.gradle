@@ -1,5 +1,8 @@
 
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
 
 android {
 
