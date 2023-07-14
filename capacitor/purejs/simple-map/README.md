@@ -10,3 +10,7 @@ To run the provided example, you can use `npm start` command.
 ```bash
 npm start
 ```
+
+### Android
+
+![](./images/android.mov.output.gif)

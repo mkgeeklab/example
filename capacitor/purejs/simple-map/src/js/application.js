@@ -13,7 +13,7 @@ const getMapsApiKey = () => {
 
 const init = async (jsApiKey) => {
     // console.log('--->init')
-    window.mkgeeklab.googlemaps.setUp({
+    await window.mkgeeklab.googlemaps.setUpAsync({
         bridge: {
             browser: GoogleMapsWeb,
             android: CapacitorBridge,

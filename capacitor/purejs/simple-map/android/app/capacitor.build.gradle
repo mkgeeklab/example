@@ -7,9 +7,9 @@ android {
   }
 }
 
-apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
+// apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation project(':mkgeeklab-googlemaps-bridge-capacitor')
+    implementation project(':mkgeeklab-googlemaps-platform-capacitor')
 
 }
 

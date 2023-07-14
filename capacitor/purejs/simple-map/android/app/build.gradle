@@ -1,6 +1,12 @@
-apply plugin: 'com.android.application'
+
+plugins {
+    id 'com.android.application'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
 
 android {
+
+    namespace 'mkgeeklab.example.purejs.simplemap'
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "mkgeeklab.example.purejs.simplemap"
@@ -38,7 +44,6 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-    implementation project(':capacitor-cordova-android-plugins')
 }
 
 apply from: 'capacitor.build.gradle'
