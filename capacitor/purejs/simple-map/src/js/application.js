@@ -21,14 +21,14 @@ const init = async (jsApiKey) => {
         jsApiKey,
     });
 
-    // const markers = Array.from(document.getElementsByTagName('mkg-marker'));
-    // const latLngList = Array.from(document.getElementsByTagName('mkg-latlng'));
+    const markers = Array.from(document.getElementsByTagName('mkg-marker'));
+    const latLngList = Array.from(document.getElementsByTagName('mkg-latlng'));
     
-    // markers.forEach((marker, idx) => {
-    //     marker.addEventListener('position_changed', (evt) => {
-    //         latLngList[idx].setPosition(evt.detail.value);
-    //     });
-    // })
+    markers.forEach((marker, idx) => {
+        marker.addEventListener('position_changed', (evt) => {
+            latLngList[idx].setPosition(evt.detail.value);
+        });
+    })
 };
 
 window.addEventListener("DOMContentLoaded", (event) => {
