@@ -4,4 +4,3 @@ project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/
 
 include ':mkgeeklab-googlemaps-platform-capacitor'
 project(':mkgeeklab-googlemaps-platform-capacitor').projectDir = new File('../../../../../googlemaps-platform-capacitor/android')
-

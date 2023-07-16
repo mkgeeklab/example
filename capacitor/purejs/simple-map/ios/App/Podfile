@@ -12,13 +12,15 @@ def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'MkgeeklabGooglemapsPlatformCapacitor', :path => '../../../../../../googlemaps-platform-capacitor'
-  
+end
+
+def googlemaps_pods
   pod 'MkgeeklabGoogleMapsCoreIos', :path => '../../../../../../googlemaps-core-ios'
 end
 
 target 'App' do
   capacitor_pods
-  # Add your Pods here
+  googlemaps_pods
 end
 
 post_install do |installer|

@@ -17,6 +17,7 @@ const init = async (jsApiKey) => {
         bridge: {
             browser: GoogleMapsWeb,
             android: CapacitorBridge,
+            ios: CapacitorBridge,
         },
         jsApiKey,
     });

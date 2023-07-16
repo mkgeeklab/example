@@ -10,5 +10,8 @@
   },
   "android": {
     "webContentsDebuggingEnabled": true
+  },
+  "ios": {
+    "webContentsDebuggingEnabled": true
   }
 }
