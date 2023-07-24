@@ -16,17 +16,17 @@
     "build:sync:ios": "vite build --minify false & npx cap sync ios"
   },
   "dependencies": {
-    "@capacitor/android": "^5.2.1",
-    "@capacitor/cli": "^5.2.1",
-    "@capacitor/core": "^5.2.1",
-    "@capacitor/ios": "^5.2.1",
-    "@mkgeeklab/googlemaps-core-common": "../../../../googlemaps-core-common/",
-    "@mkgeeklab/googlemaps-platform-browser": "../../../../googlemaps-platform-browser/",
-    "@mkgeeklab/googlemaps-platform-capacitor": "../../../../googlemaps-platform-capacitor/"
+    "@capacitor/android": "^5.2.2",
+    "@capacitor/cli": "^5.2.2",
+    "@capacitor/core": "^5.2.2",
+    "@capacitor/ios": "^5.2.2",
+    "@mkgeeklab/googlemaps-core-common": "link:..\\..\\..\\..\\googlemaps-core-common",
+    "@mkgeeklab/googlemaps-platform-browser": "link:..\\..\\..\\..\\googlemaps-platform-browser",
+    "@mkgeeklab/googlemaps-platform-capacitor": "link:..\\..\\..\\..\\googlemaps-platform-capacitor"
   },
   "devDependencies": {
-    "terser": "^5.17.1",
-    "vite": "^4.3.5"
+    "terser": "^5.19.2",
+    "vite": "^4.4.6"
   },
   "author": "",
   "license": "ISC"

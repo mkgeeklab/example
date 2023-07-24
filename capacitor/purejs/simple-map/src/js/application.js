@@ -12,7 +12,6 @@ const getMapsApiKey = () => {
 }
 
 const init = async (jsApiKey) => {
-    // console.log('--->init')
     await window.mkgeeklab.googlemaps.setUpAsync({
         bridge: {
             browser: GoogleMapsWeb,
