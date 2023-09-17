@@ -32,3 +32,8 @@ mkg-mapview {
 .endMarker {
   --mkg-icon: url('./img/flags-icon-png-10272.png');
 }
+.red-polygon {
+  --mkg-stroke-color: red;
+  --mkg-stroke-width: 3;
+  --mkg-stroke-opacity: 3;
+}

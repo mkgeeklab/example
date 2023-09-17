@@ -12,6 +12,7 @@ const getMapsApiKey = () => {
 }
 
 const init = async (jsApiKey) => {
+    console.log('--->app init');
     await window.mkgeeklab.googlemaps.setUpAsync({
         bridge: {
             browser: GoogleMapsWeb,
@@ -20,12 +21,14 @@ const init = async (jsApiKey) => {
         },
         jsApiKey,
     });
+    console.log('--->after setUpAsync');
 
     const markers = Array.from(document.getElementsByTagName('mkg-marker'));
     const latLngList = Array.from(document.getElementsByTagName('mkg-latlng'));
     
     markers.forEach((marker, idx) => {
         marker.addEventListener('position_changed', (evt) => {
+            console.log(`position_changed`, evt.detail.value.toString());
             latLngList[idx].setPosition(evt.detail.value);
         });
     })

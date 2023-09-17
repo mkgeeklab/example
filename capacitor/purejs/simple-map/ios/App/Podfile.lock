@@ -1,0 +1,55 @@
+PODS:
+  - Capacitor (5.4.0):
+    - CapacitorCordova
+  - CapacitorCordova (5.4.0)
+  - CocoaLumberjack (3.8.0):
+    - CocoaLumberjack/Core (= 3.8.0)
+  - CocoaLumberjack/Core (3.8.0)
+  - GoogleMaps (7.4.0):
+    - GoogleMaps/Maps (= 7.4.0)
+  - GoogleMaps/Base (7.4.0)
+  - GoogleMaps/Maps (7.4.0):
+    - GoogleMaps/Base
+  - MkgeeklabGoogleMapsCoreIos (0.0.1):
+    - GoogleMaps
+    - SVGKit
+  - MkgeeklabGooglemapsPlatformCapacitor (0.0.3):
+    - Capacitor
+    - MkgeeklabGoogleMapsCoreIos
+  - SVGKit (3.0.0):
+    - CocoaLumberjack (~> 3.0)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@5.4.0_@capacitor+core@5.4.0/node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@5.4.0_@capacitor+core@5.4.0/node_modules/@capacitor/ios`)"
+  - MkgeeklabGoogleMapsCoreIos (from `../../../../../../googlemaps-core-ios`)
+  - MkgeeklabGooglemapsPlatformCapacitor (from `../../../../../../googlemaps-platform-capacitor`)
+
+SPEC REPOS:
+  trunk:
+    - CocoaLumberjack
+    - GoogleMaps
+    - SVGKit
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/.pnpm/@capacitor+ios@5.4.0_@capacitor+core@5.4.0/node_modules/@capacitor/ios"
+  CapacitorCordova:
+    :path: "../../node_modules/.pnpm/@capacitor+ios@5.4.0_@capacitor+core@5.4.0/node_modules/@capacitor/ios"
+  MkgeeklabGoogleMapsCoreIos:
+    :path: "../../../../../../googlemaps-core-ios"
+  MkgeeklabGooglemapsPlatformCapacitor:
+    :path: "../../../../../../googlemaps-platform-capacitor"
+
+SPEC CHECKSUMS:
+  Capacitor: a5cd803e02b471591c81165f400ace01f40b11d3
+  CapacitorCordova: 66ce22f9976de30fd816f746e9e92e07d6befafd
+  CocoaLumberjack: 78abfb691154e2a9df8ded4350d504ee19d90732
+  GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
+  MkgeeklabGoogleMapsCoreIos: e2c44d7009caa92086fcec9108cc6c30274c36fd
+  MkgeeklabGooglemapsPlatformCapacitor: 02818260c30218d7ca5ce79f926a71e07176c2ba
+  SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
+
+PODFILE CHECKSUM: 87226356830f294bdf31a9ad454d396ff41806a3
+
+COCOAPODS: 1.12.1
