@@ -10,19 +10,28 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:sync": "vite build --minify false & npx cap sync",
+    "build:sync:web": "vite build --minify false & npx cap sync web",
+    "build:sync:android": "vite build --minify false & npx cap sync android",
+    "build:sync:ios": "vite build --minify false & npx cap sync ios",
+    "build:copy": "vite build --minify false & npx cap copy",
+    "build:copy:web": "vite build --minify false & npx cap copy web",
+    "build:copy:android": "vite build --minify false & npx cap copy android",
+    "build:copy:ios": "vite build --minify false & npx cap copy ios"
   },
   "dependencies": {
-    "@capacitor/camera": "latest",
-    "@capacitor/core": "latest",
-    "@capacitor/splash-screen": "latest",
-    "@mkgeeklab/googlemaps-core-common": "file:../../../../googlemaps-core-common",
-    "@mkgeeklab/googlemaps-platform-browser": "file:../../../../googlemaps-platform-browser"
+    "@capacitor/android": "^5.4.1",
+    "@capacitor/cli": "^5.4.1",
+    "@capacitor/core": "^5.4.1",
+    "@capacitor/ios": "^5.4.1",
+    "@mkgeeklab/googlemaps-core-common": "link:../../../../googlemaps-core-common",
+    "@mkgeeklab/googlemaps-platform-browser": "link:../../../../googlemaps-platform-browser",
+    "@mkgeeklab/googlemaps-platform-capacitor": "link:../../../../googlemaps-platform-capacitor"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
-    "terser": "^5.17.1",
-    "vite": "^2.9.13"
+    "terser": "^5.20.0",
+    "vite": "^4.4.9"
   },
   "author": "",
   "license": "ISC"

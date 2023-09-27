@@ -1,11 +1,19 @@
 {
   "appId": "mkgeeklab.example.purejs.clickmap",
   "appName": "click_map",
-  "bundledWebRuntime": false,
-  "webDir": "dist",
+  "webDir": "build",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
     }
+  },
+  "android": {
+    "webContentsDebuggingEnabled": true
+  },
+  "ios": {
+    "webContentsDebuggingEnabled": true
+  },
+  "server": {
+    "androidScheme": "https"
   }
 }

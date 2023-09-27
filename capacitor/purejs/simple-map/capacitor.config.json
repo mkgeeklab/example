@@ -1,7 +1,6 @@
 {
   "appId": "mkgeeklab.example.purejs.simplemap",
   "appName": "capacitor+purejs",
-  "bundledWebRuntime": false,
   "webDir": "build",
   "plugins": {
     "SplashScreen": {

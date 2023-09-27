@@ -10,13 +10,6 @@ const getMapsApiKey = () => {
     }
 }
 
-window.mkgeeklab.googlemaps.setUp({
-    bridge: {
-        browser: GoogleMapsWeb,
-    },
-    jsApiKey: getMapsApiKey(),
-});
-
 class Application {
     // '#' denotes 'private'
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields
@@ -28,7 +21,7 @@ class Application {
     constructor(mapElement) {
         this.#map = mapElement;
         mapElement.appendChild(this.#info);
-        map.addEventListener('click', (event) => this.#onMapClick(event));
+        this.#map.addEventListener('click', (event) => this.#onMapClick(event));
     }
 
 
@@ -90,7 +83,17 @@ class Application {
 
 
 
-const map = document.getElementById("map_canvas");
-const app = new Application(
-    map,
-);
+
+window.addEventListener("load", async (event) => {
+    await mkgeeklab.googlemaps.setUpAsync({
+        bridge: {
+            browser: GoogleMapsWeb,
+        },
+        jsApiKey: getMapsApiKey(),
+    });
+
+    const mapCanvas = document.getElementById("map_canvas");
+    const app = new Application(
+        mapCanvas,
+    );
+});
