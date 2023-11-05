@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { MapView } from '@mkgeeklab/googlemaps-core-vue';
+
+const mapViewOptions = {
+  camera: {
+    zoom: 12,
+    target: {
+      lat: 37,
+      lng: 138
+    }
+  },
+  mapType: 'roadmap'
+};
+
+</script>
+
 <template>
   <ion-page>
     <ion-header :translucent="true">
@@ -18,18 +35,12 @@
 
 
       <div id="container">
-        <MapView ></MapView>
+        <MapView v-bind="mapViewOptions"></MapView>
       </div>
 
     </ion-content>
   </ion-page>
 </template>
-
-<script setup lang="ts">
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { MapView } from '@mkgeeklab/googlemaps-core-vue';
-
-</script>
 
 <style scoped>
 #container {
@@ -37,7 +48,7 @@ import { MapView } from '@mkgeeklab/googlemaps-core-vue';
   height: 100%;
   flex: auto 1 1;
 }
-mkg-mapview {
+mapview {
   width: 100%;
   height: 100%;
   flex: auto 1 1;
