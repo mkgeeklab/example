@@ -23,21 +23,23 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import {initGoogleMapsAsync} from '@mkgeeklab/googlemaps-core-vue';
+import GoogleMapsVue from '@mkgeeklab/googlemaps-core-vue';
 import {GoogleMapsWeb} from '@mkgeeklab/googlemaps-platform-browser';
 
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
-
-router.isReady().then(async () => {
-
-  await initGoogleMapsAsync({
+  .use(router)
+  .use(GoogleMapsVue, {
     bridge: {
       browser: GoogleMapsWeb,
     },
     jsApiKey: '',
   });
-  
+
+Promise.all([
+  router.isReady(),
+  GoogleMapsVue.isReady()
+])
+.then(() => {
   app.mount('#app');
-});
+})

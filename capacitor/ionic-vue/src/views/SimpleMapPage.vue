@@ -1,8 +1,22 @@
 <script setup lang="ts">
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { MapView } from '@mkgeeklab/googlemaps-core-vue';
+import {
+IonButtons,
+IonCard,
+IonCardContent,
+IonCardHeader,
+IonCardTitle,
+IonContent,
+IonHeader,
+IonMenuButton,
+IonPage,
+IonTitle,
+IonToolbar
+} from '@ionic/vue';
 
-const mapViewOptions = {
+import { MapView, Marker, MapViewOptions } from '@mkgeeklab/googlemaps-core-vue';
+import { reactive, ref } from 'vue';
+
+const mapViewOptions = ref({
   camera: {
     zoom: 12,
     target: {
@@ -11,7 +25,15 @@ const mapViewOptions = {
     }
   },
   mapType: 'roadmap'
-};
+});
+
+const markerProps = ref({
+  position: {
+    lat: 0,
+    lng: 0,
+  },
+  title: '',
+})
 
 </script>
 
@@ -35,7 +57,30 @@ const mapViewOptions = {
 
 
       <div id="container">
-        <MapView v-bind="mapViewOptions"></MapView>
+        <MapView v-model="mapViewOptions">
+          <Marker v-model="markerProps">
+            bbb
+          </Marker>
+        </MapView>
+
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Marker</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <select v-model="mapViewOptions.mapType">
+              <option value="roadmap">Roadmap</option>
+              <option value="satellite">Satellite</option>
+            </select>
+            <ul>
+              <li>lat: <input type="range" v-model="markerProps.position.lat" min="-90" max="90" /></li>
+              <li>lng: <input type="range" v-model="markerProps.position.lng" min="-180" max="180"/></li>
+              <li>title: {{ markerProps.title }}</li>
+            </ul>
+          </ion-card-content>
+        </ion-card>
       </div>
 
     </ion-content>
@@ -52,5 +97,10 @@ mapview {
   width: 100%;
   height: 100%;
   flex: auto 1 1;
+}
+ion-card {
+  z-index: 2;
+  position: fixed;
+  bottom: 10px;
 }
 </style>
