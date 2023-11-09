@@ -16,7 +16,7 @@ IonToolbar
 import { MapView, Marker, MapViewOptions } from '@mkgeeklab/googlemaps-core-vue';
 import { reactive, ref } from 'vue';
 
-const mapViewOptions = ref({
+const mapViewOptions = ref<MapViewOptions>({
   camera: {
     zoom: 12,
     target: {
