@@ -1,39 +1,47 @@
 <script setup lang="ts">
 import {
-IonButtons,
-IonCard,
-IonCardContent,
-IonCardHeader,
-IonCardTitle,
-IonContent,
-IonHeader,
-IonMenuButton,
-IonPage,
-IonTitle,
-IonToolbar
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar
 } from '@ionic/vue';
 
-import { MapView, Marker, MapViewOptions } from '@mkgeeklab/googlemaps-core-vue';
-import { reactive, ref } from 'vue';
+import { MarkerEvent, MkgMapviewOptions, MkgMarkerOptions } from '@mkgeeklab/googlemaps-core-vue';
+import { ref } from 'vue';
 
-const mapViewOptions = ref<MapViewOptions>({
+const mapViewOptions = ref<MkgMapviewOptions>({
+  jsMapId: '283fb0722209eb1e',
   camera: {
     zoom: 12,
-    target: {
+    center: {
       lat: 37,
       lng: 138
-    }
+    },
+    tilt: 0,
+    heading: 0,
   },
   mapType: 'roadmap'
 });
 
-const markerProps = ref({
+const markerProps = ref<MkgMarkerOptions>({
   position: {
-    lat: 0,
-    lng: 0,
+    lat: 37,
+    lng: 138,
   },
-  title: '',
+  draggable: true,
 })
+
+const onDragging = (e: MarkerEvent) => {
+  console.log(e.type, e.values);
+}
+
+const mapVisible = ref<Boolean>(true);
+const markerVisible = ref<Boolean>(true);
 
 </script>
 
@@ -57,28 +65,47 @@ const markerProps = ref({
 
 
       <div id="container">
-        <MapView v-model="mapViewOptions">
-          <Marker v-model="markerProps">
+        <mkg-mapview v-model="mapViewOptions"  v-if="mapVisible">
+          <mkg-marker v-model="markerProps" @dragend="onDragging" v-if="markerVisible">
             bbb
-          </Marker>
-        </MapView>
+          </mkg-marker>
+        </mkg-mapview>
 
 
         <ion-card>
-          <ion-card-header>
-            <ion-card-title>Marker</ion-card-title>
-          </ion-card-header>
-
           <ion-card-content>
-            <select v-model="mapViewOptions.mapType">
-              <option value="roadmap">Roadmap</option>
-              <option value="satellite">Satellite</option>
-            </select>
-            <ul>
-              <li>lat: <input type="range" v-model="markerProps.position.lat" min="-90" max="90" /></li>
-              <li>lng: <input type="range" v-model="markerProps.position.lng" min="-180" max="180"/></li>
-              <li>title: {{ markerProps.title }}</li>
-            </ul>
+            <ion-item slot="header">
+              <ion-label>Map</ion-label>
+            </ion-item>
+            <div slot="content">
+              <ul>
+                <li>visible: <input type="checkbox" v-model="mapVisible"></li>
+                <li>
+                  MapTypeId: 
+                  <select v-model="mapViewOptions.mapType">
+                    <option value="roadmap">Roadmap</option>
+                    <option value="satellite">Satellite</option>
+                  </select>
+                </li>
+                <li>center/lat: <input type="number" v-model="mapViewOptions.camera!.center!.lat" /></li>
+                <li>center/lng: <input type="number" v-model="mapViewOptions.camera!.center!.lng" /></li>
+                <li>tilt: <input type="number" v-model="mapViewOptions.camera!.tilt" /></li>
+                <li>heading: <input type="number" v-model="mapViewOptions.camera!.heading" /></li>
+                <li>zoom: <input type="number" v-model="mapViewOptions.camera!.zoom" /></li>
+              </ul>
+            </div>
+            
+            <ion-item slot="header">
+              <ion-label>Marker</ion-label>
+            </ion-item>
+            <div slot="content">
+              <ul>
+                <li>visible: <input type="checkbox" v-model="markerVisible"></li>
+                <li>lat: <input type="number" v-model="markerProps.position.lat" /></li>
+                <li>lng: <input type="number" v-model="markerProps.position.lng" /></li>
+              </ul>
+            </div>
+
           </ion-card-content>
         </ion-card>
       </div>
