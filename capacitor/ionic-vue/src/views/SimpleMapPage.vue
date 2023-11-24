@@ -11,7 +11,12 @@ import {
   IonToolbar
 } from '@ionic/vue';
 
-import { MarkerEvent, MkgMapviewOptions, MkgMarkerOptions, MapviewEvent } from '@mkgeeklab/googlemaps-core-vue';
+import {
+  MkgMarkerEvent,
+  MkgMapviewOptions,
+  MkgMarkerOptions,
+  MkgMapviewEvent,
+} from '@mkgeeklab/googlemaps-core-vue';
 import { nextTick } from 'vue';
 import { ref, reactive, getCurrentInstance } from 'vue';
 
@@ -67,12 +72,12 @@ const scrollToBottom = () => {
   if (!historyDivRef.value) {return;}
   historyDivRef.value.scrollTop = historyDivRef.value?.scrollHeight;
 }
-const onMarkerEvent = (event: MarkerEvent) => {
+const onMarkerEvent = (event: MkgMarkerEvent) => {
   eventHistory.push(new MarkerEventHistory(event));
   nextTick(scrollToBottom);
 };
 
-const onMapEvent = (event: MapviewEvent) => {
+const onMapEvent = (event: MkgMapviewEvent) => {
   eventHistory.push(new MapEventHistory(event));
   nextTick(scrollToBottom);
 };

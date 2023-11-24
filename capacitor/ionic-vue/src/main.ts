@@ -30,10 +30,9 @@ const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(GoogleMapsVue, {
-    bridge: {
-      browser: GoogleMapsWeb,
-    },
-    jsApiKey: '',
+    browser: GoogleMapsWeb.setOptions({
+      apiKey: ''
+    }),
   });
 
 Promise.all([

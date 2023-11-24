@@ -33,10 +33,6 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
 
     settings.resolve.alias.push(
       {
-        find: '@core',
-        replacement: fileURLToPath(new URL('./node_modules/@mkgeeklab/googlemaps-core-common/src', import.meta.url))
-      },
-      {
         find: '@mkgeeklab/googlemaps-core-common',
         replacement: fileURLToPath(new URL('./node_modules/@mkgeeklab/googlemaps-core-common/src', import.meta.url))
       },
