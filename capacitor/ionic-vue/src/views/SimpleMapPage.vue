@@ -31,13 +31,13 @@ class EventHistory {
   }
 }
 class MapEventHistory extends EventHistory {
-  constructor(event: Event) {
-    super('Map', event);
+  constructor(event: MkgMapviewEvent) {
+    super('Map', event as Event);
   }
 }
 class MarkerEventHistory extends EventHistory {
-  constructor(event: Event) {
-    super('Map', event);
+  constructor(event: MkgMarkerEvent) {
+    super('Map', event as Event);
   }
 }
 
@@ -47,7 +47,7 @@ const eventHistory = reactive<EventHistory[]>([]);
 const historyDivRef = ref<HTMLDivElement>();
 
 const mapViewOptions = ref<MkgMapviewOptions>({
-  jsMapId: 'DEMO_MAP_ID',
+  mapId: import.meta.env.VITE_GOOGLE_MAP_ID,
   camera: {
     zoom: 12,
     center: {

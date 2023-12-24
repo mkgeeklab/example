@@ -22,7 +22,6 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-
 import {GoogleMapsVue} from '@mkgeeklab/googlemaps-core-vue';
 import {GoogleMapsWeb} from '@mkgeeklab/googlemaps-platform-browser';
 
@@ -31,7 +30,7 @@ const app = createApp(App)
   .use(router)
   .use(GoogleMapsVue, {
     browser: GoogleMapsWeb.setOptions({
-      apiKey: ''
+      apiKey: import.meta.env.VITE_GOOGLE_MAPS_JS_API,
     }),
   });
 

@@ -1,0 +1,8 @@
+include ':app'
+include ':capacitor-cordova-android-plugins'
+project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
+
+include ':googlemaps-core-android'
+project(':googlemaps-core-android').projectDir = new File('../../../../googlemaps-core-android/googlemaps-core-android/')
+
+apply from: 'capacitor.settings.gradle'

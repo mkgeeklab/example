@@ -1,15 +1,19 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@capacitor/app': 5.0.6
+  '@capacitor/android': ^5.5.1
+  '@capacitor/app': ^5.0.6
   '@capacitor/cli': 5.4.1
-  '@capacitor/core': 5.4.1
+  '@capacitor/core': ^5.5.1
   '@capacitor/haptics': 5.0.6
   '@capacitor/keyboard': 5.0.6
   '@capacitor/status-bar': 5.0.6
   '@ionic/vue': ^7.5.6
   '@ionic/vue-router': ^7.5.6
-  '@types/node': ^18.18.12
+  '@mkgeeklab/googlemaps-bridge-capacitor': link:../../../googlemaps-bridge-capacitor
+  '@mkgeeklab/googlemaps-core-vue': link:../../../googlemaps-core-vue
+  '@mkgeeklab/googlemaps-platform-browser': link:../../../googlemaps-platform-browser
+  '@types/node': ^18.18.13
   '@vitejs/plugin-legacy': ^4.1.1
   '@vitejs/plugin-vue': ^4.5.0
   '@vue/eslint-config-typescript': ^11.0.3
@@ -19,6 +23,7 @@ specifiers:
   eslint-plugin-vue: ^9.18.1
   ionicons: ^7.2.1
   jsdom: ^22.1.0
+  lib: link:/Users/maskatsum/test/lib
   terser: ^5.24.0
   ts-node: ^10.9.1
   ts-patch: ^3.0.2
@@ -30,20 +35,25 @@ specifiers:
   vue-tsc: ^1.8.22
 
 dependencies:
-  '@capacitor/app': 5.0.6_@capacitor+core@5.4.1
-  '@capacitor/core': 5.4.1
-  '@capacitor/haptics': 5.0.6_@capacitor+core@5.4.1
-  '@capacitor/keyboard': 5.0.6_@capacitor+core@5.4.1
-  '@capacitor/status-bar': 5.0.6_@capacitor+core@5.4.1
+  '@capacitor/android': 5.5.1_@capacitor+core@5.5.1
+  '@capacitor/app': 5.0.6_@capacitor+core@5.5.1
+  '@capacitor/core': 5.5.1
+  '@capacitor/haptics': 5.0.6_@capacitor+core@5.5.1
+  '@capacitor/keyboard': 5.0.6_@capacitor+core@5.5.1
+  '@capacitor/status-bar': 5.0.6_@capacitor+core@5.5.1
   '@ionic/vue': 7.5.6
   '@ionic/vue-router': 7.5.6
+  '@mkgeeklab/googlemaps-bridge-capacitor': link:../../../googlemaps-bridge-capacitor
+  '@mkgeeklab/googlemaps-core-vue': link:../../../googlemaps-core-vue
+  '@mkgeeklab/googlemaps-platform-browser': link:../../../googlemaps-platform-browser
   ionicons: 7.2.1
+  lib: link:../../../../test/lib
   vue: 3.3.8_typescript@5.3.2
   vue-router: 4.2.5_vue@3.3.8
 
 devDependencies:
   '@capacitor/cli': 5.4.1
-  '@types/node': 18.18.12
+  '@types/node': 18.18.13
   '@vitejs/plugin-legacy': 4.1.1_terser@5.24.0+vite@4.5.0
   '@vitejs/plugin-vue': 4.5.0_vite@4.5.0+vue@3.3.8
   '@vue/eslint-config-typescript': 11.0.3_bf5qo7ezdr7ub2cprr6cr44qom
@@ -53,10 +63,10 @@ devDependencies:
   eslint-plugin-vue: 9.18.1_eslint@8.54.0
   jsdom: 22.1.0
   terser: 5.24.0
-  ts-node: 10.9.1_donifo3dkp4aubdkypzsfpy32q
+  ts-node: 10.9.1_bfaeyhn6vy2qm4wyv233lgy4n4
   ts-patch: 3.0.2
   typescript: 5.3.2
-  vite: 4.5.0_4kdpav3stlfwtujab3w6frt4ba
+  vite: 4.5.0_jff52bjmij6oj4fm2vuexagpea
   vitest: 0.32.4_jsdom@22.1.0+terser@5.24.0
   vue-tsc: 1.8.22_typescript@5.3.2
 
@@ -1236,12 +1246,20 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  /@capacitor/app/5.0.6_@capacitor+core@5.4.1:
+  /@capacitor/android/5.5.1_@capacitor+core@5.5.1:
+    resolution: {integrity: sha512-WTnPnpaEvTtaEtTNRbh06Y1afF7A4plY/4uajAL0WW8tdR1FxieadF357yKGiAT6CudI/B+eOu6rxn6qWuphKg==}
+    peerDependencies:
+      '@capacitor/core': ^5.5.0
+    dependencies:
+      '@capacitor/core': 5.5.1
+    dev: false
+
+  /@capacitor/app/5.0.6_@capacitor+core@5.5.1:
     resolution: {integrity: sha512-6ZXVdnNmaYILasC/RjQw+yfTmq2ZO7Q3v5lFcDVfq3PFGnybyYQh+RstBrYri+376OmXOXxBD7E6UxBhrMzXGA==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.4.1
+      '@capacitor/core': 5.5.1
     dev: false
 
   /@capacitor/cli/5.4.1:
@@ -1270,34 +1288,34 @@ packages:
       - supports-color
     dev: true
 
-  /@capacitor/core/5.4.1:
-    resolution: {integrity: sha512-QG9gORuxw2WNcVpLHT1W3LzACOJvFWRuHcz4b9edzxehSELqiSQ4DoGWLp4PuNBBp2oV/fGA4FMNmfZ1jIAAWg==}
+  /@capacitor/core/5.5.1:
+    resolution: {integrity: sha512-VG6Iv8Q7ZAbvjodxpvjcSe0jfxUwZXnvjbi93ehuJ6eYP8U926qLSXyrT/DToZq+F6v/HyGyVgn3mrE/9jW2Tg==}
     dependencies:
       tslib: 2.6.2
     dev: false
 
-  /@capacitor/haptics/5.0.6_@capacitor+core@5.4.1:
+  /@capacitor/haptics/5.0.6_@capacitor+core@5.5.1:
     resolution: {integrity: sha512-UrMcR7p2X10ql4VLlowUuH/VckTeu0lj+RQpekxox14uxDmu5AGIFDK/iDTi8W6QZkxTJRZK6sbCjgwYgNJ7Pw==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.4.1
+      '@capacitor/core': 5.5.1
     dev: false
 
-  /@capacitor/keyboard/5.0.6_@capacitor+core@5.4.1:
+  /@capacitor/keyboard/5.0.6_@capacitor+core@5.5.1:
     resolution: {integrity: sha512-9GewAa/y2Hwkdw/Be8MTdiAjrFZ7TPDKpR44M0Y/0QMnK+mBbgzcoZ/UkuumWv6e2F1IAI+VY5eYVQHDeZcRoA==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.4.1
+      '@capacitor/core': 5.5.1
     dev: false
 
-  /@capacitor/status-bar/5.0.6_@capacitor+core@5.4.1:
+  /@capacitor/status-bar/5.0.6_@capacitor+core@5.5.1:
     resolution: {integrity: sha512-7od8CxsBnot1XMK3IeOkproFL4hgoKoWAc3pwUvmDOkQsXoxwQm4SR9mLwQavv1XfxtHbFV9Ukd7FwMxOPSViw==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.4.1
+      '@capacitor/core': 5.5.1
     dev: false
 
   /@colors/colors/1.5.0:
@@ -1861,19 +1879,19 @@ packages:
   /@types/fs-extra/8.1.5:
     resolution: {integrity: sha512-0dzKcwO+S8s2kuF5Z9oUWatQJj5Uq/iqphEtE3GQJVRRYm/tD1LglU2UnXi2A8jLq5umkGouOXOR9y0n613ZwQ==}
     dependencies:
-      '@types/node': 18.18.12
+      '@types/node': 18.18.13
     dev: true
 
   /@types/json-schema/7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
-  /@types/node/16.18.64:
-    resolution: {integrity: sha512-TiY2gIDob8+QOPIcVpS0ZY+H1DVTfplBW6UgL2b4gOYbigIlKVIh6Lcv+7YDUciUTqhVLG91PrZBXW10IoBhtw==}
+  /@types/node/16.18.65:
+    resolution: {integrity: sha512-5E9WgTy95B7i90oISjui9U5Zu7iExUPfU4ygtv4yXEy6zJFE3oQYHCnh5H1jZRPkjphJt2Ml3oQW6M0qtK534A==}
     dev: true
 
-  /@types/node/18.18.12:
-    resolution: {integrity: sha512-G7slVfkwOm7g8VqcEF1/5SXiMjP3Tbt+pXDU3r/qhlM2KkGm786DUD4xyMA2QzEElFrv/KZV9gjygv4LnkpbMQ==}
+  /@types/node/18.18.13:
+    resolution: {integrity: sha512-vXYZGRrSCreZmq1rEjMRLXJhiy8MrIeVasx+PCVlP414N7CJLHnMf+juVvjdprHyH+XRy3zKZLHeNueOpJCn0g==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -1898,7 +1916,7 @@ packages:
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
     requiresBuild: true
     dependencies:
-      '@types/node': 18.18.12
+      '@types/node': 18.18.13
     dev: true
     optional: true
 
@@ -2051,7 +2069,7 @@ packages:
       regenerator-runtime: 0.13.11
       systemjs: 6.14.2
       terser: 5.24.0
-      vite: 4.5.0_4kdpav3stlfwtujab3w6frt4ba
+      vite: 4.5.0_jff52bjmij6oj4fm2vuexagpea
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2063,7 +2081,7 @@ packages:
       vite: ^4.0.0 || ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.5.0_4kdpav3stlfwtujab3w6frt4ba
+      vite: 4.5.0_jff52bjmij6oj4fm2vuexagpea
       vue: 3.3.8_typescript@5.3.2
     dev: true
 
@@ -2518,7 +2536,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001564
-      electron-to-chromium: 1.4.591
+      electron-to-chromium: 1.4.593
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13_browserslist@4.22.1
     dev: true
@@ -2776,7 +2794,7 @@ packages:
     dependencies:
       '@cypress/request': 2.88.12
       '@cypress/xvfb': 1.2.4_supports-color@8.1.1
-      '@types/node': 16.18.64
+      '@types/node': 16.18.65
       '@types/sinonjs__fake-timers': 8.1.1
       '@types/sizzle': 2.3.8
       arch: 2.2.0
@@ -2967,8 +2985,8 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /electron-to-chromium/1.4.591:
-    resolution: {integrity: sha512-vLv/P7wwAPKQoY+CVMyyI6rsTp+A14KGtPXx92oz1FY41AAqa9l6Wkizcixg0LDuJgyeo8xgNN9+9hsnGp66UA==}
+  /electron-to-chromium/1.4.593:
+    resolution: {integrity: sha512-c7+Hhj87zWmdpmjDONbvNKNo24tvmD4mjal1+qqTYTrlF0/sNpAcDlU0Ki84ftA/5yj3BF2QhSGEC0Rky6larg==}
     dev: true
 
   /elementtree/0.1.7:
@@ -4914,7 +4932,7 @@ packages:
     hasBin: true
     dev: true
 
-  /ts-node/10.9.1_donifo3dkp4aubdkypzsfpy32q:
+  /ts-node/10.9.1_bfaeyhn6vy2qm4wyv233lgy4n4:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -4933,7 +4951,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 18.18.12
+      '@types/node': 18.18.13
       acorn: 8.11.2
       acorn-walk: 8.3.0
       arg: 4.1.3
@@ -5103,7 +5121,7 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-node/0.32.4_4kdpav3stlfwtujab3w6frt4ba:
+  /vite-node/0.32.4_jff52bjmij6oj4fm2vuexagpea:
     resolution: {integrity: sha512-L2gIw+dCxO0LK14QnUMoqSYpa9XRGnTTTDjW2h19Mr+GR0EFj4vx52W41gFXfMLqpA00eK4ZjOVYo1Xk//LFEw==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -5113,7 +5131,7 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.5.0_4kdpav3stlfwtujab3w6frt4ba
+      vite: 4.5.0_jff52bjmij6oj4fm2vuexagpea
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5125,7 +5143,7 @@ packages:
       - terser
     dev: true
 
-  /vite/4.5.0_4kdpav3stlfwtujab3w6frt4ba:
+  /vite/4.5.0_jff52bjmij6oj4fm2vuexagpea:
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -5153,7 +5171,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.18.12
+      '@types/node': 18.18.13
       esbuild: 0.18.20
       postcss: 8.4.31
       rollup: 3.29.4
@@ -5195,7 +5213,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.11
       '@types/chai-subset': 1.3.5
-      '@types/node': 18.18.12
+      '@types/node': 18.18.13
       '@vitest/expect': 0.32.4
       '@vitest/runner': 0.32.4
       '@vitest/snapshot': 0.32.4
@@ -5215,8 +5233,8 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.5.0
-      vite: 4.5.0_4kdpav3stlfwtujab3w6frt4ba
-      vite-node: 0.32.4_4kdpav3stlfwtujab3w6frt4ba
+      vite: 4.5.0_jff52bjmij6oj4fm2vuexagpea
+      vite-node: 0.32.4_jff52bjmij6oj4fm2vuexagpea
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less

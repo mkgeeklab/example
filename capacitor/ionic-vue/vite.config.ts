@@ -30,7 +30,6 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
   };
 
   if (command === 'serve') {
-
     settings.resolve.alias.push(
       {
         find: '@mkgeeklab/googlemaps-core-common',
@@ -49,8 +48,6 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         replacement: fileURLToPath(new URL('./node_modules/@mkgeeklab/googlemaps-bridge-capacitor/src', import.meta.url))
       }
     )
-
-
   }
 
   return settings;
